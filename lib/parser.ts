@@ -29,19 +29,38 @@ export interface YearStats {
 }
 
 export function parseClaudeCodeData(entries: any[]): YearStats {
+  console.log(`[Parser] Starting to parse ${entries.length} entries`);
+
+  // Debug: Log first entry to see structure
+  if (entries.length > 0) {
+    console.log("[Parser] Sample entry:", JSON.stringify(entries[0], null, 2).substring(0, 500));
+    console.log("[Parser] Entry keys:", Object.keys(entries[0]));
+  }
+
   const dailyMap = new Map<string, DailyStats>();
   const modelMap = new Map<string, number>();
   let totalTokens = 0;
   let totalCost = 0;
+  let processedCount = 0;
+  let skippedCount = 0;
 
   // Process each entry
   for (const entry of entries) {
     try {
       const timestamp = entry.timestamp || entry.createdAt || "";
-      if (!timestamp) continue;
+      if (!timestamp) {
+        skippedCount++;
+        if (skippedCount < 5) {
+          console.log("[Parser] Skipping entry - no timestamp:", Object.keys(entry));
+        }
+        continue;
+      }
 
       const date = timestamp.split("T")[0]; // YYYY-MM-DD
-      if (!date) continue;
+      if (!date) {
+        skippedCount++;
+        continue;
+      }
 
       const inputTokens = entry.inputTokens || entry.input_tokens || 0;
       const outputTokens = entry.outputTokens || entry.output_tokens || 0;
@@ -51,6 +70,10 @@ export function parseClaudeCodeData(entries: any[]): YearStats {
       const model = entry.modelName || entry.model || "unknown";
 
       const tokens = inputTokens + outputTokens + cacheCreation + cacheRead;
+
+      if (tokens > 0) {
+        processedCount++;
+      }
 
       // Update daily stats
       if (!dailyMap.has(date)) {
@@ -127,6 +150,14 @@ export function parseClaudeCodeData(entries: any[]): YearStats {
     : "Unknown";
 
   const year = dailyData[0]?.date ? new Date(dailyData[0].date).getFullYear() : new Date().getFullYear();
+
+  console.log("[Parser] Summary:");
+  console.log(`  - Processed entries: ${processedCount}`);
+  console.log(`  - Skipped entries: ${skippedCount}`);
+  console.log(`  - Total tokens: ${totalTokens}`);
+  console.log(`  - Total cost: $${totalCost.toFixed(2)}`);
+  console.log(`  - Active days: ${dailyData.length}`);
+  console.log(`  - Top models:`, topModels.map(m => m.model));
 
   return {
     year,

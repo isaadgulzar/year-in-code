@@ -50,30 +50,47 @@ export default function UploadPage() {
     try {
       // Read and parse files
       const allData: any[] = [];
+      let totalLines = 0;
+      let parsedLines = 0;
 
       for (const file of files) {
+        console.log(`Processing file: ${file.name}`);
         const text = await file.text();
         const lines = text.trim().split("\n");
+        totalLines += lines.length;
 
         for (const line of lines) {
+          if (!line.trim()) continue; // Skip empty lines
+
           try {
             const entry = JSON.parse(line);
             allData.push(entry);
+            parsedLines++;
           } catch (error) {
-            console.warn("Failed to parse line:", error);
+            console.warn("Failed to parse line:", error, "Line:", line.substring(0, 100));
           }
         }
+      }
+
+      console.log(`Total lines: ${totalLines}, Parsed: ${parsedLines}, Data entries: ${allData.length}`);
+
+      if (allData.length === 0) {
+        alert("No valid data found in the uploaded files. Please make sure you're uploading Claude Code .jsonl files.");
+        setIsProcessing(false);
+        return;
       }
 
       // Store data in sessionStorage for the results page
       sessionStorage.setItem("wrappedData", JSON.stringify(allData));
       sessionStorage.setItem("selectedTool", selectedTool);
 
+      console.log("Navigating to wrapped page with", allData.length, "entries");
+
       // Navigate to results page
       router.push("/wrapped");
     } catch (error) {
       console.error("Error processing files:", error);
-      alert("Error processing files. Please try again.");
+      alert(`Error processing files: ${error instanceof Error ? error.message : 'Unknown error'}. Check console for details.`);
     } finally {
       setIsProcessing(false);
     }
@@ -183,32 +200,74 @@ export default function UploadPage() {
 
           {/* Instructions */}
           <div className="mt-6 p-6 rounded-lg bg-gray-800/50 border border-gray-700">
-            <h3 className="font-semibold mb-3 text-orange-400">
-              Where to find your data:
+            <h3 className="font-semibold mb-4 text-orange-400 text-lg">
+              📁 How to find your files (Easy Guide):
             </h3>
-            <div className="space-y-2 text-sm text-gray-300">
-              {selectedTool === "claude-code" && (
-                <div className="font-mono bg-gray-900/50 p-3 rounded">
-                  ~/.claude/projects/&lt;project&gt;/*.jsonl<br/>
-                  or ~/.config/claude/projects/&lt;project&gt;/*.jsonl
+
+            {selectedTool === "claude-code" && (
+              <div className="space-y-4 text-sm">
+                <div>
+                  <p className="font-semibold mb-2 text-white">🖥️ On macOS:</p>
+                  <ol className="list-decimal list-inside space-y-2 text-gray-300 ml-2">
+                    <li>Open <strong>Finder</strong></li>
+                    <li>Press <kbd className="px-2 py-1 bg-gray-700 rounded">Cmd</kbd> + <kbd className="px-2 py-1 bg-gray-700 rounded">Shift</kbd> + <kbd className="px-2 py-1 bg-gray-700 rounded">G</kbd></li>
+                    <li>Paste this: <code className="bg-gray-900 px-2 py-1 rounded">~/.claude/projects</code></li>
+                    <li>Press Enter - you'll see your project folders!</li>
+                    <li>Open any project folder, select ALL <code>.jsonl</code> files</li>
+                  </ol>
+                  <p className="mt-2 text-xs text-gray-500">
+                    💡 If that doesn't work, try: <code className="bg-gray-900 px-2 py-1 rounded">~/.config/claude/projects</code>
+                  </p>
                 </div>
-              )}
-              {selectedTool === "cursor" && (
-                <div className="font-mono bg-gray-900/50 p-3 rounded">
-                  ~/.cursor/logs/*.jsonl
+
+                <div className="border-t border-gray-700 pt-4">
+                  <p className="font-semibold mb-2 text-white">🪟 On Windows:</p>
+                  <ol className="list-decimal list-inside space-y-2 text-gray-300 ml-2">
+                    <li>Open <strong>File Explorer</strong></li>
+                    <li>Click on the address bar at the top</li>
+                    <li>Paste this: <code className="bg-gray-900 px-2 py-1 rounded">%USERPROFILE%\.claude\projects</code></li>
+                    <li>Press Enter - you'll see your project folders!</li>
+                    <li>Open any project folder, select ALL <code>.jsonl</code> files</li>
+                  </ol>
                 </div>
-              )}
-              {selectedTool === "copilot" && (
-                <div className="font-mono bg-gray-900/50 p-3 rounded">
-                  Check GitHub Copilot settings for usage data export
+
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded p-3 mt-4">
+                  <p className="text-blue-300 text-sm">
+                    ✅ <strong>Yes, upload ALL .jsonl files!</strong> Each file is a coding session.
+                    The more files, the better your wrapped report will be!
+                  </p>
                 </div>
-              )}
-              {selectedTool === "windsurf" && (
-                <div className="font-mono bg-gray-900/50 p-3 rounded">
-                  ~/.windsurf/logs/*.jsonl
+              </div>
+            )}
+
+            {selectedTool === "cursor" && (
+              <div className="space-y-4 text-sm">
+                <div>
+                  <p className="font-semibold mb-2 text-white">🖥️ On macOS:</p>
+                  <ol className="list-decimal list-inside space-y-2 text-gray-300 ml-2">
+                    <li>Open <strong>Finder</strong></li>
+                    <li>Press <kbd className="px-2 py-1 bg-gray-700 rounded">Cmd</kbd> + <kbd className="px-2 py-1 bg-gray-700 rounded">Shift</kbd> + <kbd className="px-2 py-1 bg-gray-700 rounded">G</kbd></li>
+                    <li>Paste: <code className="bg-gray-900 px-2 py-1 rounded">~/.cursor/logs</code></li>
+                    <li>Select ALL <code>.jsonl</code> files</li>
+                  </ol>
                 </div>
-              )}
-            </div>
+                <div className="border-t border-gray-700 pt-4">
+                  <p className="font-semibold mb-2 text-white">🪟 On Windows:</p>
+                  <ol className="list-decimal list-inside space-y-2 text-gray-300 ml-2">
+                    <li>Open <strong>File Explorer</strong></li>
+                    <li>Click the address bar</li>
+                    <li>Paste: <code className="bg-gray-900 px-2 py-1 rounded">%USERPROFILE%\.cursor\logs</code></li>
+                    <li>Select ALL <code>.jsonl</code> files</li>
+                  </ol>
+                </div>
+              </div>
+            )}
+
+            {(selectedTool === "copilot" || selectedTool === "windsurf") && (
+              <div className="text-gray-400">
+                <p>Support for {selectedTool} coming soon! For now, please use Claude Code or Cursor.</p>
+              </div>
+            )}
           </div>
         </div>
 
