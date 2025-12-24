@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { parseClaudeCodeData } from "@/lib/parser";
 
 export default function UploadPage() {
   const [isDragging, setIsDragging] = useState(false);
@@ -80,11 +81,15 @@ export default function UploadPage() {
         return;
       }
 
-      // Store data in sessionStorage for the results page
-      sessionStorage.setItem("wrappedData", JSON.stringify(allData));
+      // Parse the data immediately to reduce storage size
+      console.log("Parsing data into stats...");
+      const stats = parseClaudeCodeData(allData);
+
+      // Store only the parsed stats (much smaller than raw data)
+      sessionStorage.setItem("wrappedStats", JSON.stringify(stats));
       sessionStorage.setItem("selectedTool", selectedTool);
 
-      console.log("Navigating to wrapped page with", allData.length, "entries");
+      console.log("Navigating to wrapped page with stats:", stats);
 
       // Navigate to results page
       router.push("/wrapped");

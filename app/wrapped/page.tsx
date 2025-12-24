@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { parseClaudeCodeData, formatNumber, formatCost, YearStats } from "@/lib/parser";
+import { formatNumber, formatCost, YearStats } from "@/lib/parser";
 
 export default function WrappedPage() {
   const [stats, setStats] = useState<YearStats | null>(null);
@@ -11,21 +11,20 @@ export default function WrappedPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const data = sessionStorage.getItem("wrappedData");
+    const statsData = sessionStorage.getItem("wrappedStats");
     const selectedTool = sessionStorage.getItem("selectedTool");
 
-    if (!data) {
+    if (!statsData) {
       router.push("/upload");
       return;
     }
 
     try {
-      const parsedData = JSON.parse(data);
-      const wrappedStats = parseClaudeCodeData(parsedData);
+      const wrappedStats = JSON.parse(statsData);
       setStats(wrappedStats);
       setTool(selectedTool || "AI Coding Tool");
     } catch (error) {
-      console.error("Error parsing data:", error);
+      console.error("Error parsing stats:", error);
       router.push("/upload");
     }
   }, [router]);
