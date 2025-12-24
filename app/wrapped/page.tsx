@@ -181,14 +181,14 @@ export default function WrappedPage() {
             </div>
 
             {/* Right Column - Full Height Heatmap */}
-            <div className="flex items-center justify-end">
-              <div className="flex gap-2">
+            <div className="flex items-start justify-end pt-0">
+              <div className="flex gap-2 flex-shrink-0">
                 {heatmapWeeks.map((week, weekIndex) => (
-                  <div key={weekIndex} className="flex flex-col gap-2">
+                  <div key={weekIndex} className="flex flex-col gap-2 flex-shrink-0">
                     {week.map((day, dayIndex) => (
                       <div
                         key={dayIndex}
-                        className={`w-[14px] h-[14px] rounded-[3px] ${
+                        className={`w-[14px] h-[14px] rounded-[3px] flex-shrink-0 ${
                           day.level === 0
                             ? "bg-gray-700/30"
                             : day.level === 1
