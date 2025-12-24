@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { parseClaudeCodeData } from "@/lib/parser";
 import { parseCcusageJson } from "@/lib/ccusage-parser";
+import { parseCcusageDailyJson } from "@/lib/ccusage-daily-parser";
 
 export default function UploadPage() {
   const [isDragging, setIsDragging] = useState(false);
@@ -70,9 +71,21 @@ export default function UploadPage() {
         return;
       }
 
-      // Check if it's ccusage JSON format
-      if (jsonData.year && jsonData.stats) {
-        console.log("Detected ccusage JSON format");
+      // Check if it's ccusage daily JSON format
+      if (jsonData.daily && jsonData.totals) {
+        console.log("Detected ccusage daily JSON format");
+        const stats = parseCcusageDailyJson(jsonData);
+
+        // Store the stats
+        sessionStorage.setItem("wrappedStats", JSON.stringify(stats));
+        sessionStorage.setItem("selectedTool", selectedTool);
+
+        console.log("Navigating to wrapped page with stats:", stats);
+        router.push("/wrapped");
+      }
+      // Check if it's ccusage year JSON format (future)
+      else if (jsonData.year && jsonData.stats) {
+        console.log("Detected ccusage year JSON format");
         const stats = parseCcusageJson(jsonData);
 
         // Store the stats
@@ -82,7 +95,7 @@ export default function UploadPage() {
         console.log("Navigating to wrapped page with stats:", stats);
         router.push("/wrapped");
       } else {
-        alert("This doesn't look like a ccusage JSON file. Please run 'npx ccusage year --format json' and upload that file.");
+        alert("This doesn't look like a ccusage JSON file. Please run the command shown below and upload that file.");
         setIsProcessing(false);
       }
     } catch (error) {
@@ -202,10 +215,13 @@ export default function UploadPage() {
                     <div className="flex-1">
                       <p className="font-bold text-white mb-3">Run this command in your terminal:</p>
                       <div className="bg-gray-900 rounded p-3 font-mono text-xs text-green-400 mb-2">
-                        npx ccusage year --format json --output my-wrapped.json
+                        npx ccusage daily --since {new Date().getFullYear()}0101 --until {new Date().getFullYear()}1231 --json &gt; my-wrapped.json
                       </div>
                       <p className="text-gray-400 text-xs">
-                        This will analyze your Claude Code usage and create a <code className="bg-gray-700 px-1 rounded">my-wrapped.json</code> file
+                        This will analyze your {new Date().getFullYear()} Claude Code usage and create a <code className="bg-gray-700 px-1 rounded">my-wrapped.json</code> file
+                      </p>
+                      <p className="text-gray-400 text-xs mt-2">
+                        💡 <strong>Tip:</strong> For other years, change the dates: <code className="bg-gray-700 px-1 rounded">--since 20240101 --until 20241231</code>
                       </p>
                     </div>
                   </div>
@@ -227,9 +243,9 @@ export default function UploadPage() {
                 {/* Why this is better */}
                 <div className="border-t border-gray-700 pt-4">
                   <p className="text-xs text-gray-500">
-                    <strong>💡 Why this way?</strong> The ccusage CLI accurately processes your usage data,
-                    calculates costs, and aggregates everything - just like the command you already used!
-                    We then make it beautiful with our wrapped UI. ✨
+                    <strong>💡 Why this way?</strong> The ccusage CLI accurately processes your Claude Code session logs,
+                    calculates costs, and aggregates all your usage data. We then transform that into a beautiful
+                    wrapped report with insights and stats! ✨
                   </p>
                 </div>
               </div>

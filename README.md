@@ -10,28 +10,30 @@ Your AI Coding Year Wrapped - Generate beautiful year-in-review reports for ANY 
 - **📤 Easy Sharing**: Share on Twitter/X, download HTML reports
 - **⚡ Fast & Free**: No backend processing, completely free
 
-## 🆘 Can't Find Your Data?
+## 🚀 Quick Start (2 Steps!)
 
-We've got you covered with **automatic copy scripts**:
+### For Claude Code Users:
 
-### macOS/Linux:
+**Step 1:** Generate your wrapped data JSON:
 ```bash
-# Download and run the script
-curl -o copy-data.sh https://raw.githubusercontent.com/isaadgulzar/vibe-wrapped/main/scripts/copy-claude-data.sh
-chmod +x copy-data.sh
-./copy-data.sh
+# For 2024 data
+npx ccusage daily --since 20240101 --until 20241231 --json > my-wrapped.json
+
+# For current year (2025)
+npx ccusage daily --since 20250101 --until 20251231 --json > my-wrapped.json
 ```
 
-### Windows PowerShell:
-```powershell
-# Download and run the script
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/isaadgulzar/vibe-wrapped/main/scripts/copy-claude-data.ps1" -OutFile copy-data.ps1
-.\copy-data.ps1
-```
+**Step 2:** Upload `my-wrapped.json` to [vibewrapped.com](https://vibewrapped.com) and get your beautiful wrapped report! 🎉
 
-**Or** check our detailed guide: [📁 FINDING_DATA.md](FINDING_DATA.md)
+---
 
-## Quick Start
+### For Cursor/Copilot/Windsurf Users:
+
+Support coming soon! For now, check our detailed guide: [📁 FINDING_DATA.md](FINDING_DATA.md)
+
+---
+
+## Development Setup
 
 ### Prerequisites
 
@@ -58,34 +60,28 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to see the app!
 
-## How to Use
+## How It Works
 
-### 1. Find Your Data
+### For End Users:
 
-Locate your AI coding tool's usage logs:
+1. **Run the command** (works with published ccusage version):
+   ```bash
+   npx ccusage daily --since 20240101 --until 20241231 --json > my-wrapped.json
+   ```
 
-- **Claude Code**: `~/.claude/projects/<project>/*.jsonl` or `~/.config/claude/projects/<project>/*.jsonl`
-- **Cursor**: `~/.cursor/logs/*.jsonl`
-- **GitHub Copilot**: Check GitHub Copilot settings for usage data export
-- **Windsurf**: `~/.windsurf/logs/*.jsonl`
+2. **Upload to VibeWrapped**: Visit [vibewrapped.com](https://vibewrapped.com) and upload your JSON file
 
-### 2. Upload Your Data
+3. **Get Your Wrapped!** View your beautiful report with:
+   - Total tokens used
+   - Total cost
+   - Active days and streaks
+   - Top models
+   - Activity insights
+   - Share on Twitter/X or download as HTML!
 
-1. Visit the app at [http://localhost:3000](http://localhost:3000)
-2. Click "Get Started"
-3. Select your AI coding tool
-4. Drag and drop your JSONL files
+### Privacy First 🔒
 
-### 3. Get Your Wrapped!
-
-View your beautiful wrapped report with:
-- Total tokens used
-- Total cost
-- Active days and streaks
-- Top models
-- Activity insights
-
-Share on Twitter/X or download as HTML!
+All data processing happens **100% in your browser**. Your usage data never leaves your computer - we just help you visualize it beautifully!
 
 ## Tech Stack
 
