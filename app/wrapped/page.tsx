@@ -145,13 +145,13 @@ export default function WrappedPage() {
                       </div>
                     </div>
                     <div className="text-2xl font-bold text-orange-400">
-                      {model.percentage.toFixed(1)}%
+                      {(model.percentage || 0).toFixed(1)}%
                     </div>
                   </div>
                   <div className="mt-4 bg-gray-900/50 rounded-full h-2 overflow-hidden">
                     <div
                       className="bg-gradient-to-r from-orange-500 to-pink-600 h-full"
-                      style={{ width: `${model.percentage}%` }}
+                      style={{ width: `${model.percentage || 0}%` }}
                     />
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export default function WrappedPage() {
             <div className="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
               <div className="text-lg font-semibold mb-2">Average Daily Cost</div>
               <div className="text-3xl font-bold text-pink-400">
-                {formatCost(stats.totalCost / stats.activeDays)}
+                {formatCost(stats.activeDays > 0 ? stats.totalCost / stats.activeDays : 0)}
               </div>
             </div>
           </div>

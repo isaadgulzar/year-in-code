@@ -135,7 +135,7 @@ export function parseClaudeCodeData(entries: any[]): YearStats {
     .map(([model, tokens]) => ({
       model: model.replace("claude-", "").replace(/-\d{8}/g, ""),
       tokens,
-      percentage: (tokens / totalTokens) * 100,
+      percentage: totalTokens > 0 ? (tokens / totalTokens) * 100 : 0,
     }))
     .sort((a, b) => b.tokens - a.tokens)
     .slice(0, 5);
