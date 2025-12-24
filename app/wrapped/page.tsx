@@ -119,110 +119,112 @@ export default function WrappedPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex items-center justify-center p-8">
-      <div className="w-full max-w-5xl">
+      <div className="w-full max-w-4xl">
         {/* Main Card */}
-        <div className="bg-gray-800/30 backdrop-blur-sm rounded-3xl p-16 border border-gray-700/50 shadow-2xl">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-16">
-            <div className="text-gray-400 text-xl font-light">
-              Joined {joinedDaysAgo} Days Ago
-            </div>
+        <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-12 border border-gray-700/50 shadow-2xl">
+          {/* 2-Column Layout */}
+          <div className="grid grid-cols-2 gap-16">
+            {/* Left Column - All Content */}
+            <div className="flex flex-col">
+              {/* Header */}
+              <div className="text-gray-400 text-lg font-light mb-12">
+                Joined {joinedDaysAgo} Days Ago
+              </div>
 
-            {/* Activity Heatmap */}
-            <div className="flex gap-2">
-              {heatmapWeeks.map((week, weekIndex) => (
-                <div key={weekIndex} className="flex flex-col gap-2">
-                  {week.map((day, dayIndex) => (
-                    <div
-                      key={dayIndex}
-                      className={`w-[14px] h-[14px] rounded-[3px] ${
-                        day.level === 0
-                          ? "bg-gray-700/30"
-                          : day.level === 1
-                          ? "bg-orange-400/40"
-                          : day.level === 2
-                          ? "bg-orange-400/60"
-                          : day.level === 3
-                          ? "bg-orange-500/80"
-                          : "bg-orange-500"
-                      }`}
-                      title={day.date}
-                    />
+              {/* Models Section */}
+              <div className="mb-12">
+                <h2 className="text-gray-400 text-base font-light mb-4">Models</h2>
+                <div className="space-y-2">
+                  {stats.topModels.slice(0, 3).map((model, index) => (
+                    <div key={index} className="flex items-center gap-4">
+                      <span className="text-3xl font-light text-gray-500 w-8">
+                        {index + 1}
+                      </span>
+                      <span className="text-2xl font-normal text-white">
+                        {model.model}
+                      </span>
+                    </div>
                   ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          {/* Models Section */}
-          <div className="mb-16">
-            <h2 className="text-gray-400 text-xl font-light mb-6">Models</h2>
-            <div className="space-y-4">
-              {stats.topModels.slice(0, 3).map((model, index) => (
-                <div key={index} className="flex items-center gap-6">
-                  <span className="text-5xl font-extralight text-gray-500 w-12">
-                    {index + 1}
-                  </span>
-                  <span className="text-4xl font-normal text-white">
-                    {model.model}
-                  </span>
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 gap-x-16 gap-y-8 mb-12">
+                <div>
+                  <div className="text-gray-400 text-base font-light mb-2">Agents</div>
+                  <div className="text-5xl font-light">{formatNumber(stats.totalSessions)}</div>
                 </div>
-              ))}
+
+                <div>
+                  <div className="text-gray-400 text-base font-light mb-2">Tabs</div>
+                  <div className="text-5xl font-light">{stats.activeDays}</div>
+                </div>
+
+                <div>
+                  <div className="text-gray-400 text-base font-light mb-2">Tokens</div>
+                  <div className="text-5xl font-light">{formatNumber(stats.totalTokens)}</div>
+                </div>
+
+                <div>
+                  <div className="text-gray-400 text-base font-light mb-2">Streak</div>
+                  <div className="text-5xl font-light">{stats.longestStreak}d</div>
+                </div>
+              </div>
+
+              {/* Branding */}
+              <div className="flex items-center gap-2 text-gray-400 mb-auto">
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20.66 4.46L17.5 1.29c-.39-.39-1.02-.39-1.41 0L14.68 2.7l4.24 4.24 1.41-1.41c.39-.39.39-1.02 0-1.41l-1.67-1.67zM3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
+                </svg>
+                <span className="text-base font-light">vibewrapped.com/{stats.year}</span>
+              </div>
+            </div>
+
+            {/* Right Column - Full Height Heatmap */}
+            <div className="flex items-center justify-end">
+              <div className="flex gap-2">
+                {heatmapWeeks.map((week, weekIndex) => (
+                  <div key={weekIndex} className="flex flex-col gap-2">
+                    {week.map((day, dayIndex) => (
+                      <div
+                        key={dayIndex}
+                        className={`w-[14px] h-[14px] rounded-[3px] ${
+                          day.level === 0
+                            ? "bg-gray-700/30"
+                            : day.level === 1
+                            ? "bg-orange-400/40"
+                            : day.level === 2
+                            ? "bg-orange-400/60"
+                            : day.level === 3
+                            ? "bg-orange-500/80"
+                            : "bg-orange-500"
+                        }`}
+                        title={day.date}
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-2 gap-x-48 gap-y-12 mb-16">
-            {/* Left Column */}
-            <div>
-              <div className="text-gray-400 text-xl font-light mb-3">Agents</div>
-              <div className="text-7xl font-extralight">{formatNumber(stats.totalSessions)}</div>
-            </div>
-
-            {/* Right Column */}
-            <div>
-              <div className="text-gray-400 text-xl font-light mb-3">Tabs</div>
-              <div className="text-7xl font-extralight">{stats.activeDays}</div>
-            </div>
-
-            {/* Bottom Left */}
-            <div>
-              <div className="text-gray-400 text-xl font-light mb-3">Tokens</div>
-              <div className="text-7xl font-extralight">{formatNumber(stats.totalTokens)}</div>
-            </div>
-
-            {/* Bottom Right */}
-            <div>
-              <div className="text-gray-400 text-xl font-light mb-3">Streak</div>
-              <div className="text-7xl font-extralight">{stats.longestStreak}d</div>
-            </div>
-          </div>
-
-          {/* Branding */}
-          <div className="flex items-center gap-3 text-gray-400 mb-12">
-            <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.66 4.46L17.5 1.29c-.39-.39-1.02-.39-1.41 0L14.68 2.7l4.24 4.24 1.41-1.41c.39-.39.39-1.02 0-1.41l-1.67-1.67zM3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
-            </svg>
-            <span className="text-xl font-light">vibewrapped.com/{stats.year}</span>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-5">
+          {/* Action Buttons - Full Width Below */}
+          <div className="flex gap-4 mt-12">
             <button
               onClick={downloadImage}
-              className="px-10 py-4 rounded-full bg-white text-black font-medium text-lg hover:bg-gray-100 transition-colors shadow-lg"
+              className="px-8 py-3 rounded-full bg-white text-black font-medium text-base hover:bg-gray-100 transition-colors shadow-lg"
             >
               Download
             </button>
             <button
               onClick={copyToClipboard}
-              className="px-10 py-4 rounded-full bg-gray-700/50 text-white font-medium text-lg hover:bg-gray-700 transition-colors"
+              className="px-8 py-3 rounded-full bg-gray-700/50 text-white font-medium text-base hover:bg-gray-700 transition-colors"
             >
               Copy
             </button>
             <Link
               href="/upload"
-              className="px-10 py-4 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-medium text-lg hover:from-orange-600 hover:to-pink-700 transition-colors shadow-lg shadow-orange-500/30"
+              className="px-8 py-3 rounded-full bg-gradient-to-r from-orange-500 to-pink-600 text-white font-medium text-base hover:from-orange-600 hover:to-pink-700 transition-colors shadow-lg shadow-orange-500/30"
             >
               Create New
             </Link>
