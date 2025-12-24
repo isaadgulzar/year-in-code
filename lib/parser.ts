@@ -22,10 +22,13 @@ export interface YearStats {
   totalTokens: number;
   totalCost: number;
   activeDays: number;
+  currentStreak: number;
   longestStreak: number;
+  totalSessions: number;
   topModels: Array<{ model: string; tokens: number; percentage: number }>;
   dailyData: DailyStats[];
   peakDay: string;
+  peakHour?: number;
 }
 
 export function parseClaudeCodeData(entries: any[]): YearStats {
@@ -164,7 +167,9 @@ export function parseClaudeCodeData(entries: any[]): YearStats {
     totalTokens,
     totalCost,
     activeDays: dailyData.length,
+    currentStreak,
     longestStreak,
+    totalSessions: dailyData.length, // Simplified: one session per day
     topModels,
     dailyData,
     peakDay,
