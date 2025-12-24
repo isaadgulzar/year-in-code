@@ -10,6 +10,27 @@ Your AI Coding Year Wrapped - Generate beautiful year-in-review reports for ANY 
 - **📤 Easy Sharing**: Share on Twitter/X, download HTML reports
 - **⚡ Fast & Free**: No backend processing, completely free
 
+## 🆘 Can't Find Your Data?
+
+We've got you covered with **automatic copy scripts**:
+
+### macOS/Linux:
+```bash
+# Download and run the script
+curl -o copy-data.sh https://raw.githubusercontent.com/isaadgulzar/vibe-wrapped/main/scripts/copy-claude-data.sh
+chmod +x copy-data.sh
+./copy-data.sh
+```
+
+### Windows PowerShell:
+```powershell
+# Download and run the script
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/isaadgulzar/vibe-wrapped/main/scripts/copy-claude-data.ps1" -OutFile copy-data.ps1
+.\copy-data.ps1
+```
+
+**Or** check our detailed guide: [📁 FINDING_DATA.md](FINDING_DATA.md)
+
 ## Quick Start
 
 ### Prerequisites
