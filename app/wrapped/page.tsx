@@ -50,11 +50,12 @@ export default function WrappedPage() {
       activityMap.set(day.date, level);
     });
 
-    // Get date range
-    const firstDate = new Date(stats.dailyData[0].date);
-    const lastDate = new Date(stats.dailyData[stats.dailyData.length - 1].date);
+    // Generate FULL YEAR - January 1 to December 31
+    const year = stats.year;
+    const firstDate = new Date(year, 0, 1); // January 1
+    const lastDate = new Date(year, 11, 31); // December 31
 
-    // Generate all dates in range
+    // Generate all dates in the full year
     const weeks: Array<Array<{ date: string; level: number }>> = [];
     let currentWeek: Array<{ date: string; level: number }> = [];
 
@@ -182,13 +183,13 @@ export default function WrappedPage() {
 
             {/* Right Column - Full Height Heatmap */}
             <div className="flex items-center justify-end h-full">
-              <div className="flex gap-2 flex-shrink-0">
+              <div className="flex gap-[3px] flex-shrink-0">
                 {heatmapWeeks.map((week, weekIndex) => (
-                  <div key={weekIndex} className="flex flex-col gap-2 flex-shrink-0">
+                  <div key={weekIndex} className="flex flex-col gap-[3px] flex-shrink-0">
                     {week.map((day, dayIndex) => (
                       <div
                         key={dayIndex}
-                        className={`w-[14px] h-[14px] rounded-[3px] flex-shrink-0 ${
+                        className={`w-[11px] h-[11px] rounded-[2px] flex-shrink-0 ${
                           day.level === 0
                             ? "bg-gray-700/30"
                             : day.level === 1
