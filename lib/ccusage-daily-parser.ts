@@ -12,12 +12,12 @@ export interface CcusageDailyJsonOutput {
     totalCost: number;
     modelsUsed: string[];
     modelBreakdowns?: Array<{
-      model: string;
+      modelName: string;
       inputTokens: number;
       outputTokens: number;
       cacheCreationTokens: number;
       cacheReadTokens: number;
-      totalCost: number;
+      cost: number;
     }>;
     project?: string;
   }>;
@@ -89,14 +89,20 @@ export function parseCcusageDailyJson(json: CcusageDailyJsonOutput): YearStats {
   // Aggregate model usage from all days
   const modelMap = new Map<string, number>();
   for (const day of json.daily) {
-    if (day.modelBreakdowns) {
+    if (day.modelBreakdowns && day.modelBreakdowns.length > 0) {
       for (const breakdown of day.modelBreakdowns) {
-        const currentTokens = modelMap.get(breakdown.model) || 0;
-        modelMap.set(breakdown.model, currentTokens + breakdown.inputTokens + breakdown.outputTokens + breakdown.cacheCreationTokens + breakdown.cacheReadTokens);
+        // Skip if modelName is undefined or null
+        if (!breakdown.modelName) continue;
+
+        const currentTokens = modelMap.get(breakdown.modelName) || 0;
+        modelMap.set(breakdown.modelName, currentTokens + breakdown.inputTokens + breakdown.outputTokens + breakdown.cacheCreationTokens + breakdown.cacheReadTokens);
       }
-    } else {
+    } else if (day.modelsUsed && day.modelsUsed.length > 0) {
       // Fallback to modelsUsed if no breakdowns
       for (const model of day.modelsUsed) {
+        // Skip if model is undefined or null
+        if (!model) continue;
+
         const currentTokens = modelMap.get(model) || 0;
         modelMap.set(model, currentTokens + day.totalTokens / day.modelsUsed.length);
       }
@@ -105,6 +111,7 @@ export function parseCcusageDailyJson(json: CcusageDailyJsonOutput): YearStats {
 
   // Top models
   const topModels = Array.from(modelMap.entries())
+    .filter(([model]) => model != null && model !== '') // Filter out null/undefined/empty models
     .map(([model, tokens]) => ({
       model: model.replace("claude-", "").replace(/-\d{8}/g, ""),
       tokens,
