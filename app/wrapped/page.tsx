@@ -123,10 +123,10 @@ export default function WrappedPage() {
       <div className="w-full max-w-4xl">
         {/* Main Card */}
         <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-12 border border-gray-700/50 shadow-2xl">
-          {/* 2-Column Layout */}
-          <div className="grid grid-cols-2 gap-16">
-            {/* Left Column - All Content */}
-            <div className="flex flex-col">
+          {/* Vertical Layout */}
+          <div className="flex flex-col">
+            {/* Row 1: Stats Content */}
+            <div className="mb-8">
               {/* Header */}
               <div className="text-gray-400 text-lg font-light mb-12">
                 Joined {joinedDaysAgo} Days Ago
@@ -173,7 +173,7 @@ export default function WrappedPage() {
               </div>
 
               {/* Branding */}
-              <div className="flex items-center gap-2 text-gray-400 mb-auto">
+              <div className="flex items-center gap-2 text-gray-400">
                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M20.66 4.46L17.5 1.29c-.39-.39-1.02-.39-1.41 0L14.68 2.7l4.24 4.24 1.41-1.41c.39-.39.39-1.02 0-1.41l-1.67-1.67zM3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
                 </svg>
@@ -181,11 +181,11 @@ export default function WrappedPage() {
               </div>
             </div>
 
-            {/* Right Column - Full Height Heatmap */}
-            <div className="flex items-center justify-end h-full">
-              <div className="flex flex-col gap-[3px] flex-shrink-0">
+            {/* Row 2: Horizontal Heatmap */}
+            <div className="flex justify-center mb-8">
+              <div className="flex gap-[3px] flex-shrink-0">
                 {heatmapWeeks.map((week, weekIndex) => (
-                  <div key={weekIndex} className="flex flex-row gap-[3px] flex-shrink-0">
+                  <div key={weekIndex} className="flex flex-col gap-[3px] flex-shrink-0">
                     {week.map((day, dayIndex) => (
                       <div
                         key={dayIndex}
@@ -209,8 +209,8 @@ export default function WrappedPage() {
             </div>
           </div>
 
-          {/* Action Buttons - Full Width Below */}
-          <div className="flex gap-4 mt-12">
+          {/* Row 3: Action Buttons */}
+          <div className="flex gap-4">
             <button
               onClick={downloadImage}
               className="px-8 py-3 rounded-full bg-white text-black font-medium text-base hover:bg-gray-100 transition-colors shadow-lg"
