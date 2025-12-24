@@ -16,14 +16,14 @@ Your AI Coding Year Wrapped - Generate beautiful year-in-review reports for ANY 
 
 **Step 1:** Generate your wrapped data JSON:
 ```bash
-# For 2024 data
-npx ccusage daily --since 20240101 --until 20241231 --json > my-wrapped.json
+# macOS/Linux - saves to Desktop
+npx ccusage daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped.json
 
-# For current year (2025)
-npx ccusage daily --since 20250101 --until 20251231 --json > my-wrapped.json
+# Windows - saves to Desktop
+npx ccusage daily --since 20240101 --until 20241231 --json > %USERPROFILE%\Desktop\my-wrapped.json
 ```
 
-**Step 2:** Upload `my-wrapped.json` to [vibewrapped.com](https://vibewrapped.com) and get your beautiful wrapped report! 🎉
+**Step 2:** Upload `my-wrapped.json` from your Desktop to [vibewrapped.com](https://vibewrapped.com) and get your beautiful wrapped report! 🎉
 
 ---
 
@@ -66,10 +66,14 @@ Open [http://localhost:3000](http://localhost:3000) to see the app!
 
 1. **Run the command** (works with published ccusage version):
    ```bash
-   npx ccusage daily --since 20240101 --until 20241231 --json > my-wrapped.json
+   # macOS/Linux - saves to Desktop
+   npx ccusage daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped.json
+
+   # Windows - saves to Desktop
+   npx ccusage daily --since 20240101 --until 20241231 --json > %USERPROFILE%\Desktop\my-wrapped.json
    ```
 
-2. **Upload to VibeWrapped**: Visit [vibewrapped.com](https://vibewrapped.com) and upload your JSON file
+2. **Upload to VibeWrapped**: Visit [vibewrapped.com](https://vibewrapped.com) and upload `my-wrapped.json` from your Desktop
 
 3. **Get Your Wrapped!** View your beautiful report with:
    - Total tokens used

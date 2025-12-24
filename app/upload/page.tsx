@@ -214,14 +214,28 @@ export default function UploadPage() {
                     <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white">1</div>
                     <div className="flex-1">
                       <p className="font-bold text-white mb-3">Run this command in your terminal:</p>
-                      <div className="bg-gray-900 rounded p-3 font-mono text-xs text-green-400 mb-2">
-                        npx ccusage daily --since {new Date().getFullYear()}0101 --until {new Date().getFullYear()}1231 --json &gt; my-wrapped.json
+
+                      {/* macOS/Linux */}
+                      <div className="mb-3">
+                        <p className="text-gray-400 text-xs mb-1">🍎 <strong>macOS/Linux:</strong></p>
+                        <div className="bg-gray-900 rounded p-3 font-mono text-xs text-green-400">
+                          npx ccusage daily --since {new Date().getFullYear()}0101 --until {new Date().getFullYear()}1231 --json &gt; ~/Desktop/my-wrapped.json
+                        </div>
                       </div>
+
+                      {/* Windows */}
+                      <div className="mb-3">
+                        <p className="text-gray-400 text-xs mb-1">🪟 <strong>Windows:</strong></p>
+                        <div className="bg-gray-900 rounded p-3 font-mono text-xs text-green-400">
+                          npx ccusage daily --since {new Date().getFullYear()}0101 --until {new Date().getFullYear()}1231 --json &gt; %USERPROFILE%\Desktop\my-wrapped.json
+                        </div>
+                      </div>
+
                       <p className="text-gray-400 text-xs">
-                        This will analyze your {new Date().getFullYear()} Claude Code usage and create a <code className="bg-gray-700 px-1 rounded">my-wrapped.json</code> file
+                        📁 The file will be saved to your <strong>Desktop</strong> as <code className="bg-gray-700 px-1 rounded">my-wrapped.json</code>
                       </p>
                       <p className="text-gray-400 text-xs mt-2">
-                        💡 <strong>Tip:</strong> For other years, change the dates: <code className="bg-gray-700 px-1 rounded">--since 20240101 --until 20241231</code>
+                        💡 <strong>Tip:</strong> For 2024 data, use: <code className="bg-gray-700 px-1 rounded">--since 20240101 --until 20241231</code>
                       </p>
                     </div>
                   </div>
