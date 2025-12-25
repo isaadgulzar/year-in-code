@@ -6,8 +6,8 @@ export default function Home() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex items-start justify-center overflow-y-auto">
-      <main className="flex-1 flex items-start justify-center px-4 sm:px-6 pt-8 md:pt-12 pb-8">
+    <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex items-center justify-center">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8">
         <div className="w-full max-w-5xl text-center">
           <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col items-center gap-2 sm:gap-3 md:gap-4">
             <span className="inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-orange-500/10 text-orange-400 text-xs sm:text-sm font-medium border border-orange-500/20">
@@ -30,7 +30,7 @@ export default function Home() {
           <div className="flex justify-center">
             <Link
               href={`/${currentYear}/upload`}
-              className="px-8 sm:px-10 md:px-12 py-4 sm:py-5 rounded-xl bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 transition-all font-semibold text-base sm:text-lg md:text-xl shadow-2xl shadow-orange-500/50 hover:scale-105 transform"
+              className="relative px-8 sm:px-10 md:px-12 py-4 sm:py-5 rounded-xl bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 transition-all font-semibold text-base sm:text-lg md:text-xl shadow-2xl shadow-orange-500/50 hover:scale-105 transform animate-gradient bg-[length:200%_200%] hover:shadow-pink-500/50"
             >
               Generate Your Wrapped
             </Link>
