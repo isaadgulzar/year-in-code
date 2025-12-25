@@ -234,15 +234,15 @@ export default function ReportPage() {
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <p className="text-base text-gray-400 mb-1">Streak</p>
-                    <p className="text-3xl font-medium text-white">{stats.longestStreak}<span className="pl-0.5">🔥</span></p>
-                  </div>
-
+                <div className="flex justify-between mb-6">
                   <div>
                     <p className="text-base text-gray-400 mb-1">Tokens</p>
                     <p className="text-3xl font-black text-orange-500">{formatNumber(stats.totalTokens)}</p>
+                  </div>
+
+                  <div>
+                    <p className="text-base text-gray-400 mb-1">Streak</p>
+                    <p className="text-3xl font-medium text-white">{stats.longestStreak}<span className="pl-0.5">🔥</span></p>
                   </div>
                 </div>
 
