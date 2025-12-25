@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { Analytics } from "@vercel/analytics/react";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
@@ -145,6 +146,9 @@ export default function RootLayout({
         <div className="sr-only" aria-hidden="true">
           <a href="https://saadgulzar.dev" rel="author">Saad Gulzar</a>
         </div>
+
+        {/* Vercel Analytics */}
+        <Analytics />
       </body>
     </html>
   );
