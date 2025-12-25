@@ -222,14 +222,13 @@ export default function ReportPage() {
       // Step 3: Open Twitter in new tab after 2.5s delay (gives user time to read toast)
       setTimeout(() => {
         const text = encodeURIComponent(
-          `Just checked my ${stats?.year} AI coding year!\n\n🔥 ${formatNumber(stats?.totalTokens || 0)} tokens used\n🎯 ${stats?.longestStreak || 0} day streak\n⚡ Top model: ${formatModelName(stats?.topModels[0]?.model || 'N/A')}\n\nCheck yours at yearincode.xyz\n\n#YearInCode #ClaudeCode #BuildInPublic`
+          `Just checked my ${stats?.year} AI coding year!\n\n🔥 ${formatNumber(stats?.totalTokens || 0)} tokens used\n🎯 ${stats?.longestStreak || 0} day streak\n⚡ Top model: ${formatModelName(stats?.topModels[0]?.model || 'N/A')}\n\nCheck yours at yearincode.xyz/${stats?.year}\n\n#YearInCode #ClaudeCode #BuildInPublic`
         );
 
-        const url = encodeURIComponent(`https://yearincode.xyz/${stats?.year}`);
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${text}`;
 
         window.open(twitterUrl, '_blank');
-      }, 2500);
+      }, 2000);
 
     } catch (error) {
       console.error('Error preparing to share:', error);
@@ -365,39 +364,39 @@ export default function ReportPage() {
         {/* Action Buttons */}
         <div className="flex flex-col items-center gap-3">
           <div className="flex flex-wrap gap-2 items-center justify-center">
-            {/* Share on X - PRIMARY CTA for viral growth */}
+
             <button
-              onClick={shareOnX}
-              disabled={isSharing}
-              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white"
-              aria-label="Share on X/Twitter"
+              onClick={copyToClipboard}
+              disabled={isCopying}
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gray-700/50 text-white hover:bg-gray-700 border border-gray-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
+              aria-label="Copy summary card as PNG"
             >
-              {isSharing ? 'Preparing...' : (
-                <>
-                  Share on
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                  </svg>
-                </>
-              )}
+              Copy
             </button>
+            
 
             <button
               onClick={downloadImage}
               disabled={isDownloading}
-              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
               aria-label="Download summary card as PNG"
             >
               Download
             </button>
 
+            {/* Share on X - PRIMARY CTA for viral growth */}
             <button
-              onClick={copyToClipboard}
-              disabled={isCopying}
-              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gray-700/50 text-white hover:bg-gray-700 border border-gray-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              aria-label="Copy summary card as PNG"
+              onClick={shareOnX}
+              disabled={isSharing}
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white hover:scale-105 transform"
+              aria-label="Share on X/Twitter"
             >
-              Copy
+              <>
+                  Share on
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </>
             </button>
           </div>
 
