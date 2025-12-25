@@ -118,7 +118,7 @@ export default function UploadPage() {
         console.log("Navigating to report page with stats:", stats);
         router.push(`/${year}/report`);
       } else {
-        toast.error("This doesn't look like a ccusage JSON file. Please run the command shown below and upload that file.", {
+        toast.error("This doesn't look like a valid/ccusage JSON file.\nPlease run the command shown below and upload that file.", {
           style: {
             background: '#374151',
             color: '#fff',
@@ -147,6 +147,9 @@ export default function UploadPage() {
     <>
       <Toaster
         position="top-center"
+        containerStyle={{
+          top: '5.8rem',
+        }}
         toastOptions={{
           style: {
             minWidth: '390px',
