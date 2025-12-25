@@ -11,15 +11,15 @@
 
 ---
 
-> Privacy-first year-in-review reports for Claude Code users. All processing happens 100% client-side in your browser.
+> Year-in-review reports for Claude Code users. All processing happens client-side in your browser.
 
 ## ✨ Features
 
-- **🔒 Privacy First**: Zero backend processing — your data never leaves your browser
 - **📊 Beautiful Visualizations**: Year-long activity heatmaps, top model usage, streak tracking
-- **⚡ Lightning Fast**: Just 2 steps — generate JSON with ccusage, upload, done
+- **⚡ Simple & Fast**: Just 2 steps — generate JSON with ccusage, upload, done
 - **📸 Share Ready**: Download or copy your wrapped summary as a shareable image
-- **💯 Free Forever**: No server costs, no tracking, no limits
+- **🔒 Client-Side Processing**: Your data stays in your browser, nothing uploaded to servers
+- **💯 Free & Open Source**: No costs, no tracking, no limits
 - **🎨 Responsive Design**: Works beautifully on desktop and mobile
 
 ## 🚀 Quick Start
@@ -76,9 +76,9 @@ npx ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop/my
 Year in Code transforms raw Claude Code usage data into an engaging year-in-review experience:
 
 - 🎁 **Wrapped Experience**: Inspired by Spotify Wrapped and GitHub Wrapped
-- 🔐 **Privacy Respecting**: Unlike cloud-based analytics, all processing happens in your browser
+- 🔧 **Simple to Use**: No complex setup, just export from ccusage and visualize
 - 🚀 **Built for ccusage**: Designed to work seamlessly with the amazing [ccusage](https://github.com/ryoppippi/ccusage) CLI
-- 💝 **Community Driven**: Open source and free for everyone
+- 💝 **Open Source**: Free for everyone to use and contribute
 
 ---
 
@@ -87,7 +87,6 @@ Year in Code transforms raw Claude Code usage data into an engaging year-in-revi
 ### Prerequisites
 
 - Node.js 18+ installed
-- MongoDB (optional, for auth features)
 
 ### Installation
 
@@ -98,10 +97,6 @@ cd year-in-code
 
 # Install dependencies
 npm install
-
-# Set up environment variables (optional - only needed for auth features)
-cp .env.local .env
-# Edit .env and add your MongoDB URI and Auth secrets if needed
 
 # Run development server
 npm run dev
@@ -162,11 +157,7 @@ npm run lint
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/isaadgulzar/year-in-code)
 
 1. Click the button above
-2. Add environment variables (optional - only if you want auth):
-   - `MONGODB_URI`: Your MongoDB connection string
-   - `AUTH_SECRET`: Random secret for Auth.js
-   - `GITHUB_ID` & `GITHUB_SECRET`: For GitHub OAuth (optional)
-   - `GOOGLE_ID` & `GOOGLE_SECRET`: For Google OAuth (optional)
+2. Deploy - no environment variables needed!
 
 ### Other Platforms
 
@@ -179,24 +170,7 @@ npm run build
 
 ## Environment Variables
 
-Environment variables are **optional** and only needed if you want to add authentication features:
-
-```env
-# Auth.js (optional)
-AUTH_SECRET=your-secret-key-here
-AUTH_URL=http://localhost:3000
-
-# MongoDB (optional)
-MONGODB_URI=mongodb://localhost:27017/yearincode
-
-# OAuth Providers (optional)
-GITHUB_ID=your-github-client-id
-GITHUB_SECRET=your-github-client-secret
-GOOGLE_ID=your-google-client-id
-GOOGLE_SECRET=your-google-client-secret
-```
-
-The core functionality works without any environment variables.
+No environment variables required! The app works completely standalone with no backend dependencies.
 
 ## FAQ & Tips
 
@@ -215,10 +189,6 @@ npx ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my
 ### Can I use data from multiple years?
 
 Currently, each upload processes one year at a time. Multi-year comparison is on the roadmap!
-
-### Is my data safe?
-
-Absolutely! All processing happens **100% in your browser**. Your JSON file is read client-side using JavaScript's FileReader API. Nothing is uploaded to any server. You can even use the app offline after the initial page load.
 
 ### What data format does it accept?
 

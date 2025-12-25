@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Home() {
   const currentYear = new Date().getFullYear();
@@ -11,14 +10,6 @@ export default function Home() {
       <main className="flex-1 flex items-start justify-center px-4 sm:px-6 pt-8 md:pt-12 pb-8">
         <div className="w-full max-w-5xl text-center">
           <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col items-center gap-2 sm:gap-3 md:gap-4">
-            <Image
-              src="/logo.png"
-              alt="Year in Code Logo"
-              width={400}
-              height={200}
-              className="w-20 h-auto sm:w-24 md:w-36"
-              priority
-            />
             <span className="inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-orange-500/10 text-orange-400 text-xs sm:text-sm font-medium border border-orange-500/20">
               Claude Code Year in Review
             </span>
