@@ -118,7 +118,7 @@ export default function UploadPage() {
         console.log("Navigating to report page with stats:", stats);
         router.push(`/${year}/report`);
       } else {
-        toast.error("This doesn't look like a ccusage JSON file. Please run the command shown below and upload that file.", {
+        toast.error("This doesn't look like a valid/ccusage JSON file.\nPlease run the command shown below and upload that file.", {
           style: {
             background: '#374151',
             color: '#fff',
@@ -147,6 +147,9 @@ export default function UploadPage() {
     <>
       <Toaster
         position="top-center"
+        containerStyle={{
+          top: '5.8rem',
+        }}
         toastOptions={{
           style: {
             minWidth: '390px',
@@ -160,15 +163,10 @@ export default function UploadPage() {
           },
         }}
       />
-      <div className="min-h-[calc(100vh-5rem)] bg-linear-to-br from-gray-900 via-gray-800 to-black text-white flex items-start justify-center overflow-y-auto">
-        <main className="flex-1 flex items-start justify-center px-4 sm:px-6 py-8">
+      <div className="min-h-[calc(100vh-5rem)] bg-linear-to-br from-gray-900 via-gray-800 to-black text-white flex items-center justify-center overflow-y-auto">
+        <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8">
         <div className="w-full max-w-4xl">
           <div className="text-center mb-4 sm:mb-6">
-            <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col items-center gap-2 sm:gap-3 md:gap-4">
-              <span className="inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-orange-500/10 text-orange-400 text-xs sm:text-sm font-medium border border-orange-500/20">
-                Claude Code Year in Review
-              </span>
-            </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
               Your wrapped report is{" "}
               <span className="bg-linear-to-br from-orange-400 to-pink-600 text-transparent bg-clip-text">
@@ -199,10 +197,10 @@ export default function UploadPage() {
                         <p className="text-gray-400 text-[10px] sm:text-xs mb-1">🍎 <strong>macOS/Linux:</strong></p>
                         <div className="relative group">
                           <div className="bg-gray-900 rounded p-1.5 sm:p-2 pr-8 font-mono text-[10px] sm:text-xs text-green-400 overflow-x-auto">
-                            npx ccusage daily --since {year}0101 --until {year}1231 --json &gt; ~/Desktop/my-wrapped-{year}.json
+                            npx -y ccusage@latest daily --since {year}0101 --until {year}1231 --json &gt; ~/Desktop/my-wrapped-{year}.json
                           </div>
                           <button
-                            onClick={() => copyCommand(`npx ccusage daily --since ${year}0101 --until ${year}1231 --json > ~/Desktop/my-wrapped-${year}.json`, 'mac')}
+                            onClick={() => copyCommand(`npx -y ccusage@latest daily --since ${year}0101 --until ${year}1231 --json > ~/Desktop/my-wrapped-${year}.json`, 'mac')}
                             className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-800 rounded transition-colors"
                             title="Copy command"
                           >
@@ -224,10 +222,10 @@ export default function UploadPage() {
                         <p className="text-gray-400 text-[10px] sm:text-xs mb-1">🪟 <strong>Windows:</strong></p>
                         <div className="relative group">
                           <div className="bg-gray-900 rounded p-1.5 sm:p-2 pr-8 font-mono text-[10px] sm:text-xs text-green-400 overflow-x-auto">
-                            npx ccusage daily --since {year}0101 --until {year}1231 --json &gt; %USERPROFILE%\Desktop\my-wrapped-{year}.json
+                            npx -y ccusage@latest daily --since {year}0101 --until {year}1231 --json &gt; %USERPROFILE%\Desktop\my-wrapped-{year}.json
                           </div>
                           <button
-                            onClick={() => copyCommand(`npx ccusage daily --since ${year}0101 --until ${year}1231 --json > %USERPROFILE%\\Desktop\\my-wrapped-${year}.json`, 'windows')}
+                            onClick={() => copyCommand(`npx -y ccusage@latest daily --since ${year}0101 --until ${year}1231 --json > %USERPROFILE%\\Desktop\\my-wrapped-${year}.json`, 'windows')}
                             className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-800 rounded transition-colors"
                             title="Copy command"
                           >
@@ -278,9 +276,11 @@ export default function UploadPage() {
 
                         {files.length > 0 ? (
                           <div>
-                            <p className="text-xs sm:text-sm font-semibold text-blue-400 mb-1">
-                              ✅ {files[0].name}
+                            <div className="text-xl sm:text-2xl mb-1">✅</div>
+                            <p className="text-xs sm:text-sm font-semibold mb-0.5">
+                              {files[0].name}
                             </p>
+                            <p className="text-[10px] sm:text-xs text-gray-400">Click to change file</p>
                           </div>
                         ) : (
                           <div>

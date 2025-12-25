@@ -12,6 +12,7 @@ export default function ReportPage() {
   const [stats, setStats] = useState<YearStats | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
   const [currentDomain, setCurrentDomain] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -122,7 +123,7 @@ export default function ReportPage() {
       });
 
       const link = document.createElement('a');
-      link.download = `vibe-wrapped-${stats?.year || 'report'}.png`;
+      link.download = `${stats?.year || '2025'}-cc-wrapped-preview-image.png`;
       link.href = dataUrl;
       link.click();
     } catch (error) {
@@ -183,6 +184,66 @@ export default function ReportPage() {
     }
   };
 
+  const shareOnX = async () => {
+    if (!cardRef.current || isSharing) return;
+
+    setIsSharing(true);
+    try {
+      // Step 1: Copy the image to clipboard
+      const blob = await toPng(cardRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+        backgroundColor: '#1f2937',
+      }).then(dataUrl => {
+        return fetch(dataUrl).then(res => res.blob());
+      });
+
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'image/png': blob
+        })
+      ]);
+
+      // Step 2: Show toast with instructions
+      toast.success('Image copied! Paste it in your tweet (Ctrl/Cmd+V)', {
+        duration: 5000,
+        style: {
+          background: '#374151',
+          color: '#fff',
+          fontFamily: 'var(--font-jetbrains-mono)',
+          minWidth: '550px',
+        },
+        iconTheme: {
+          primary: '#f97316',
+          secondary: '#fff',
+        },
+      });
+
+      // Step 3: Open Twitter in new tab after 2.5s delay (gives user time to read toast)
+      setTimeout(() => {
+        const text = encodeURIComponent(
+          `Just checked my ${stats?.year} AI coding year!\n\n🔥 ${formatNumber(stats?.totalTokens || 0)} tokens used\n🎯 ${stats?.longestStreak || 0} day streak\n⚡ Top model: ${formatModelName(stats?.topModels[0]?.model || 'N/A')}\n\nCheck yours at yearincode.xyz/${stats?.year}\n\n#YearInCode #ClaudeCode #BuildInPublic`
+        );
+
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${text}`;
+
+        window.open(twitterUrl, '_blank');
+      }, 2000);
+
+    } catch (error) {
+      console.error('Error preparing to share:', error);
+      toast.error('Failed to copy image. Please try again.', {
+        style: {
+          background: '#374151',
+          color: '#fff',
+          fontFamily: 'var(--font-jetbrains-mono)',
+        },
+      });
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   if (!stats) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
@@ -199,8 +260,13 @@ export default function ReportPage() {
 
   return (
     <>
-      <Toaster position="top-center" />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-8">
+      <Toaster
+        position="top-center"
+        containerStyle={{
+          top: '5.8rem',
+        }}
+      />
+      <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-8 overflow-auto">
         <div className="w-full" style={{ maxWidth: "540px" }}>
         {/* Main Summary Card */}
         <div
@@ -296,29 +362,54 @@ export default function ReportPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-2 items-center justify-center">
-          <button
-            onClick={downloadImage}
-            disabled={isDownloading}
-            className="px-5 py-2 rounded-full text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Download summary card as PNG"
-          >
-            Download
-          </button>
-          <button
-            onClick={copyToClipboard}
-            disabled={isCopying}
-            className="px-5 py-2 rounded-full text-base font-medium transition-all bg-gray-700/50 text-white hover:bg-gray-700 border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Copy summary card as PNG"
-          >
-            Copy
-          </button>
-          <Link
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-wrap gap-2 items-center justify-center">
+
+            <button
+              onClick={copyToClipboard}
+              disabled={isCopying}
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gray-700/50 text-white hover:bg-gray-700 border border-gray-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
+              aria-label="Copy summary card as PNG"
+            >
+              Copy
+            </button>
+            
+
+            <button
+              onClick={downloadImage}
+              disabled={isDownloading}
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
+              aria-label="Download summary card as PNG"
+            >
+              Download
+            </button>
+
+            {/* Share on X - PRIMARY CTA for viral growth */}
+            <button
+              onClick={shareOnX}
+              disabled={isSharing}
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white hover:scale-105 transform"
+              aria-label="Share on X/Twitter"
+            >
+              <>
+                  Share on
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </>
+            </button>
+          </div>
+
+          {/* Generate new wrapped - Small link underneath */}
+          {/* <Link
             href={`/${year}/upload`}
-            className="px-5 py-2 rounded-full text-base font-medium transition-all bg-gradient-to-r from-orange-500 to-pink-600 text-white hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/30"
+            className="text-sm text-gray-400 hover:text-gray-300 transition-colors flex items-center gap-2"
           >
-            Create New
-          </Link>
+            Generate new wrapped
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link> */}
         </div>
         </div>
       </div>

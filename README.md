@@ -30,7 +30,7 @@ You need [ccusage](https://github.com/ryoppippi/ccusage) to generate your usage 
 
 ```bash
 # Check if you have Claude Code usage data
-npx ccusage@latest daily
+npx -y ccusage@latest daily
 ```
 
 ### Step 1: Generate Your Data
@@ -39,13 +39,13 @@ Export your Claude Code usage as JSON:
 
 ```bash
 # For 2025 data (macOS/Linux)
-npx ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped-2025.json
+npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped-2025.json
 
 # For 2025 data (Windows)
-npx ccusage@latest daily --since 20250101 --until 20251231 --json > %USERPROFILE%\Desktop\my-wrapped-2025.json
+npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > %USERPROFILE%\Desktop\my-wrapped-2025.json
 
 # For 2024 data
-npx ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped-2024.json
+npx -y ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped-2024.json
 ```
 
 > 💡 **Tip**: Always include `@latest` to ensure you're using the newest version of ccusage
@@ -65,8 +65,7 @@ npx ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop/my
 - 📸 **Shareable Card**: Beautiful summary card to download or share
 
 <div align="center">
-    <img src="https://via.placeholder.com/800x400/1f2937/ffffff?text=Add+Your+Screenshot+Here" alt="Year in Code Screenshot" width="600">
-    <p><em>Replace this placeholder with an actual screenshot of your wrapped report</em></p>
+    <img src="/public/2025-cc-wrapped-preview-image.png" alt="Year in Code Screenshot" width="600">
 </div>
 
 ---
@@ -111,10 +110,10 @@ Open [http://localhost:3000](http://localhost:3000) to see the app!
 1. **Generate your data** using the official ccusage CLI:
    ```bash
    # For 2025 data
-   npx ccusage daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json
+   npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json
 
    # For 2024 data
-   npx ccusage daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped.json
+   npx -y ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped.json
    ```
 
 2. **Upload to Year in Code**: Visit [yearincode.xyz](https://yearincode.xyz) and upload your JSON file
@@ -180,10 +179,10 @@ You need the [ccusage](https://github.com/ryoppippi/ccusage) CLI. No installatio
 
 ```bash
 # Check your usage first
-npx ccusage@latest daily
+npx -y ccusage@latest daily
 
 # Then export as JSON for Year in Code
-npx ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json
+npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json
 ```
 
 ### Can I use data from multiple years?
