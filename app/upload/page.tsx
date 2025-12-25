@@ -9,9 +9,9 @@ import { parseCcusageDailyJson } from "@/lib/ccusage-daily-parser";
 
 export default function UploadPage() {
   const [isDragging, setIsDragging] = useState(false);
-  const [selectedTool, setSelectedTool] = useState<string>("claude-code");
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
   const router = useRouter();
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -43,6 +43,14 @@ export default function UploadPage() {
       const selectedFiles = Array.from(e.target.files);
       setFiles(selectedFiles);
     }
+  }, []);
+
+  const copyCommand = useCallback((command: string, id: string) => {
+    navigator.clipboard.writeText(command);
+    setCopiedCommand(id);
+    setTimeout(() => {
+      setCopiedCommand(null);
+    }, 2000);
   }, []);
 
   const handleProcess = async () => {
@@ -78,7 +86,7 @@ export default function UploadPage() {
 
         // Store the stats
         sessionStorage.setItem("wrappedStats", JSON.stringify(stats));
-        sessionStorage.setItem("selectedTool", selectedTool);
+        sessionStorage.setItem("selectedTool", "claude-code");
 
         console.log("Navigating to wrapped page with stats:", stats);
         router.push("/wrapped");
@@ -90,7 +98,7 @@ export default function UploadPage() {
 
         // Store the stats
         sessionStorage.setItem("wrappedStats", JSON.stringify(stats));
-        sessionStorage.setItem("selectedTool", selectedTool);
+        sessionStorage.setItem("selectedTool", "claude-code");
 
         console.log("Navigating to wrapped page with stats:", stats);
         router.push("/wrapped");
@@ -107,208 +115,164 @@ export default function UploadPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex flex-col overflow-hidden">
       {/* Header */}
       <header className="border-b border-gray-800">
-        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="container mx-auto px-6 py-3 flex justify-between items-center">
           <Link href="/">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-pink-600 text-transparent bg-clip-text cursor-pointer">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-orange-400 to-pink-600 text-transparent bg-clip-text cursor-pointer">
               VibeWrapped
             </h1>
           </Link>
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-12 max-w-4xl">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Create Your Wrapped
-          </h1>
-          <p className="text-xl text-gray-400">
-            Upload your AI coding tool data and get beautiful insights
-          </p>
-        </div>
-
-        {/* Tool Selection */}
-        <div className="mb-8">
-          <label className="block text-lg font-semibold mb-4">
-            Select Your AI Coding Tool
-          </label>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { id: "claude-code", name: "Claude Code", icon: "🤖" },
-              { id: "cursor", name: "Cursor", icon: "📝" },
-              { id: "copilot", name: "Copilot", icon: "🚁" },
-              { id: "windsurf", name: "Windsurf", icon: "🏄" },
-            ].map((tool) => (
-              <button
-                key={tool.id}
-                onClick={() => setSelectedTool(tool.id)}
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  selectedTool === tool.id
-                    ? "border-orange-500 bg-orange-500/10"
-                    : "border-gray-700 hover:border-orange-500/50"
-                }`}
-              >
-                <div className="text-3xl mb-2">{tool.icon}</div>
-                <div className="font-semibold">{tool.name}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* File Upload */}
-        <div className="mb-8">
-          <label className="block text-lg font-semibold mb-4">
-            Upload Your Data Files
-          </label>
-
-          <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-lg p-12 text-center transition-all cursor-pointer ${
-              isDragging
-                ? "border-orange-500 bg-orange-500/10"
-                : "border-gray-700 hover:border-orange-500/50"
-            }`}
-            onClick={() => document.getElementById("file-input")?.click()}
-          >
-            <input
-              id="file-input"
-              type="file"
-              accept=".json"
-              onChange={handleFileInput}
-              className="hidden"
-            />
-
-            <div className="text-6xl mb-4">📁</div>
-
-            {files.length > 0 ? (
-              <div>
-                <p className="text-xl font-semibold text-orange-400 mb-2">
-                  ✅ File selected: {files[0].name}
-                </p>
-              </div>
-            ) : (
-              <div>
-                <p className="text-xl font-semibold mb-2">
-                  Drag & drop your JSON file here
-                </p>
-                <p className="text-gray-400">or click to browse</p>
-              </div>
-            )}
+      <main className="flex-1 flex items-center justify-center px-6 py-6">
+        <div className="w-full max-w-3xl">
+          <div className="text-center mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold mb-2">
+              Create Your Wrapped
+            </h1>
+            <p className="text-base text-gray-400">
+              Upload your Claude Code data and get beautiful insights
+            </p>
           </div>
 
           {/* Instructions */}
-          <div className="mt-6 p-6 rounded-lg bg-gray-800/50 border border-gray-700">
-            <h3 className="font-semibold mb-4 text-orange-400 text-lg">
-              🚀 Super Easy 2-Step Process:
-            </h3>
+          <div className="mb-4">
+            {/* Compact Instructions */}
+            <div className="mt-4 p-4 rounded-lg bg-gray-800/50 border border-gray-700">
+              <h3 className="font-semibold mb-3 text-orange-400 text-sm">
+                📋 Quick Setup:
+              </h3>
 
-            {selectedTool === "claude-code" && (
-              <div className="space-y-6 text-sm">
+              <div className="space-y-3 text-xs">
                 {/* Step 1 */}
-                <div className="bg-gradient-to-r from-orange-500/10 to-pink-600/10 border border-orange-500/30 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white">1</div>
+                <div className="bg-gradient-to-r from-orange-500/10 to-pink-600/10 border border-orange-500/30 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white text-xs">1</div>
                     <div className="flex-1">
-                      <p className="font-bold text-white mb-3">Run this command in your terminal:</p>
+                      <p className="font-semibold text-white mb-2">Run this command in your terminal:</p>
 
                       {/* macOS/Linux */}
-                      <div className="mb-3">
-                        <p className="text-gray-400 text-xs mb-1">🍎 <strong>macOS/Linux:</strong></p>
-                        <div className="bg-gray-900 rounded p-3 font-mono text-xs text-green-400">
-                          npx ccusage daily --since {new Date().getFullYear()}0101 --until {new Date().getFullYear()}1231 --json &gt; ~/Desktop/my-wrapped.json
+                      <div className="mb-2">
+                        <p className="text-gray-400 text-[10px] mb-1">🍎 <strong>macOS/Linux:</strong></p>
+                        <div className="relative group">
+                          <div className="bg-gray-900 rounded p-2 pr-8 font-mono text-[10px] text-green-400 overflow-x-auto">
+                            npx ccusage daily --since {new Date().getFullYear()}0101 --until {new Date().getFullYear()}1231 --json &gt; ~/Desktop/my-wrapped.json
+                          </div>
+                          <button
+                            onClick={() => copyCommand(`npx ccusage daily --since ${new Date().getFullYear()}0101 --until ${new Date().getFullYear()}1231 --json > ~/Desktop/my-wrapped.json`, 'mac')}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-800 rounded transition-colors"
+                            title="Copy command"
+                          >
+                            {copiedCommand === 'mac' ? (
+                              <svg className="w-3.5 h-3.5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                            )}
+                          </button>
                         </div>
                       </div>
 
                       {/* Windows */}
-                      <div className="mb-3">
-                        <p className="text-gray-400 text-xs mb-1">🪟 <strong>Windows:</strong></p>
-                        <div className="bg-gray-900 rounded p-3 font-mono text-xs text-green-400">
-                          npx ccusage daily --since {new Date().getFullYear()}0101 --until {new Date().getFullYear()}1231 --json &gt; %USERPROFILE%\Desktop\my-wrapped.json
+                      <div className="mb-2">
+                        <p className="text-gray-400 text-[10px] mb-1">🪟 <strong>Windows:</strong></p>
+                        <div className="relative group">
+                          <div className="bg-gray-900 rounded p-2 pr-8 font-mono text-[10px] text-green-400 overflow-x-auto">
+                            npx ccusage daily --since {new Date().getFullYear()}0101 --until {new Date().getFullYear()}1231 --json &gt; %USERPROFILE%\Desktop\my-wrapped.json
+                          </div>
+                          <button
+                            onClick={() => copyCommand(`npx ccusage daily --since ${new Date().getFullYear()}0101 --until ${new Date().getFullYear()}1231 --json > %USERPROFILE%\\Desktop\\my-wrapped.json`, 'windows')}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-800 rounded transition-colors"
+                            title="Copy command"
+                          >
+                            {copiedCommand === 'windows' ? (
+                              <svg className="w-3.5 h-3.5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                            ) : (
+                              <svg className="w-3.5 h-3.5 text-gray-400 group-hover:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                              </svg>
+                            )}
+                          </button>
                         </div>
                       </div>
 
-                      <p className="text-gray-400 text-xs">
-                        📁 The file will be saved to your <strong>Desktop</strong> as <code className="bg-gray-700 px-1 rounded">my-wrapped.json</code>
-                      </p>
-                      <p className="text-gray-400 text-xs mt-2">
-                        💡 <strong>Tip:</strong> For 2024 data, use: <code className="bg-gray-700 px-1 rounded">--since 20240101 --until 20241231</code>
+                      <p className="text-gray-400 text-[10px]">
+                        📁 File saved to your <strong>Desktop</strong> as <code className="bg-gray-700 px-1 rounded">my-wrapped.json</code>
                       </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Step 2 */}
-                <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/30 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white">2</div>
+                <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 border border-blue-500/30 rounded-lg p-3">
+                  <div className="flex items-start gap-2">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center font-bold text-white text-xs">2</div>
                     <div className="flex-1">
-                      <p className="font-bold text-white mb-2">Upload the JSON file above ☝️</p>
-                      <p className="text-gray-400 text-xs">
-                        The file will be created in your current directory. Just drag and drop it above!
-                      </p>
+                      <p className="font-semibold text-white mb-2">Upload your JSON file:</p>
+                      <div
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        className={`border-2 border-dashed rounded-lg p-4 text-center transition-all cursor-pointer ${
+                          isDragging
+                            ? "border-blue-400 bg-blue-500/10"
+                            : "border-gray-600 hover:border-blue-400/50"
+                        }`}
+                        onClick={() => document.getElementById("file-input-2")?.click()}
+                      >
+                        <input
+                          id="file-input-2"
+                          type="file"
+                          accept=".json"
+                          onChange={handleFileInput}
+                          className="hidden"
+                        />
+
+                        {files.length > 0 ? (
+                          <div>
+                            <p className="text-xs font-semibold text-blue-400 mb-1">
+                              ✅ {files[0].name}
+                            </p>
+                          </div>
+                        ) : (
+                          <div>
+                            <div className="text-2xl mb-1">📁</div>
+                            <p className="text-xs font-semibold mb-0.5">
+                              Drag & drop here
+                            </p>
+                            <p className="text-[10px] text-gray-400">or click to browse</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                {/* Why this is better */}
-                <div className="border-t border-gray-700 pt-4">
-                  <p className="text-xs text-gray-500">
-                    <strong>💡 Why this way?</strong> The ccusage CLI accurately processes your Claude Code session logs,
-                    calculates costs, and aggregates all your usage data. We then transform that into a beautiful
-                    wrapped report with insights and stats! ✨
-                  </p>
-                </div>
               </div>
-            )}
-
-            {selectedTool === "cursor" && (
-              <div className="space-y-4 text-sm">
-                <div>
-                  <p className="font-semibold mb-2 text-white">🖥️ On macOS:</p>
-                  <ol className="list-decimal list-inside space-y-2 text-gray-300 ml-2">
-                    <li>Open <strong>Finder</strong></li>
-                    <li>Press <kbd className="px-2 py-1 bg-gray-700 rounded">Cmd</kbd> + <kbd className="px-2 py-1 bg-gray-700 rounded">Shift</kbd> + <kbd className="px-2 py-1 bg-gray-700 rounded">G</kbd></li>
-                    <li>Paste: <code className="bg-gray-900 px-2 py-1 rounded">~/.cursor/logs</code></li>
-                    <li>Select ALL <code>.jsonl</code> files</li>
-                  </ol>
-                </div>
-                <div className="border-t border-gray-700 pt-4">
-                  <p className="font-semibold mb-2 text-white">🪟 On Windows:</p>
-                  <ol className="list-decimal list-inside space-y-2 text-gray-300 ml-2">
-                    <li>Open <strong>File Explorer</strong></li>
-                    <li>Click the address bar</li>
-                    <li>Paste: <code className="bg-gray-900 px-2 py-1 rounded">%USERPROFILE%\.cursor\logs</code></li>
-                    <li>Select ALL <code>.jsonl</code> files</li>
-                  </ol>
-                </div>
-              </div>
-            )}
-
-            {(selectedTool === "copilot" || selectedTool === "windsurf") && (
-              <div className="text-gray-400">
-                <p>Support for {selectedTool} coming soon! For now, please use Claude Code or Cursor.</p>
-              </div>
-            )}
+            </div>
           </div>
-        </div>
 
-        {/* Process Button */}
-        <div className="text-center">
-          <button
-            onClick={handleProcess}
-            disabled={files.length === 0 || isProcessing}
-            className={`px-8 py-4 rounded-lg font-semibold text-lg transition-all ${
-              files.length === 0 || isProcessing
-                ? "bg-gray-700 text-gray-500 cursor-not-allowed"
-                : "bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/50"
-            }`}
-          >
-            {isProcessing ? "Processing..." : "Generate My Wrapped 🎉"}
-          </button>
+          {/* Process Button */}
+          <div className="text-center">
+            <button
+              onClick={handleProcess}
+              disabled={files.length === 0 || isProcessing}
+              className={`px-10 py-4 rounded-xl font-semibold text-lg transition-all ${
+                files.length === 0 || isProcessing
+                  ? "bg-gray-700 text-gray-500 cursor-not-allowed"
+                  : "bg-gradient-to-r from-orange-500 to-pink-600 hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/50 hover:scale-105 transform"
+              }`}
+            >
+              {isProcessing ? "Processing..." : "Generate My Wrapped"}
+            </button>
+          </div>
         </div>
       </main>
     </div>
