@@ -12,6 +12,7 @@ export default function ReportPage() {
   const [stats, setStats] = useState<YearStats | null>(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isCopying, setIsCopying] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
   const [currentDomain, setCurrentDomain] = useState("");
   const cardRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -183,6 +184,66 @@ export default function ReportPage() {
     }
   };
 
+  const shareOnX = async () => {
+    if (!cardRef.current || isSharing) return;
+
+    setIsSharing(true);
+    try {
+      // Step 1: Copy the image to clipboard
+      const blob = await toPng(cardRef.current, {
+        quality: 1,
+        pixelRatio: 2,
+        backgroundColor: '#1f2937',
+      }).then(dataUrl => {
+        return fetch(dataUrl).then(res => res.blob());
+      });
+
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'image/png': blob
+        })
+      ]);
+
+      // Step 2: Show toast with instructions
+      toast.success('Image copied! Paste it in your tweet (Ctrl/Cmd+V)', {
+        duration: 5000,
+        style: {
+          background: '#374151',
+          color: '#fff',
+          fontFamily: 'var(--font-jetbrains-mono)',
+        },
+        iconTheme: {
+          primary: '#1d9bf0',
+          secondary: '#fff',
+        },
+      });
+
+      // Step 3: Open Twitter in new tab after 2.5s delay (gives user time to read toast)
+      setTimeout(() => {
+        const text = encodeURIComponent(
+          `Just checked my ${stats?.year} AI coding year!\n\n🔥 ${formatNumber(stats?.totalTokens || 0)} tokens used\n🎯 ${stats?.longestStreak || 0} day streak\n⚡ Top model: ${formatModelName(stats?.topModels[0]?.model || 'N/A')}\n\nCheck yours at yearincode.xyz\n\n#YearInCode #ClaudeCode #BuildInPublic`
+        );
+
+        const url = encodeURIComponent(`https://yearincode.xyz/${stats?.year}`);
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${text}&url=${url}`;
+
+        window.open(twitterUrl, '_blank');
+      }, 2500);
+
+    } catch (error) {
+      console.error('Error preparing to share:', error);
+      toast.error('Failed to copy image. Please try again.', {
+        style: {
+          background: '#374151',
+          color: '#fff',
+          fontFamily: 'var(--font-jetbrains-mono)',
+        },
+      });
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
   if (!stats) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
@@ -200,7 +261,7 @@ export default function ReportPage() {
   return (
     <>
       <Toaster position="top-center" />
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-8">
+      <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-8 overflow-auto">
         <div className="w-full" style={{ maxWidth: "540px" }}>
         {/* Main Summary Card */}
         <div
@@ -297,6 +358,19 @@ export default function ReportPage() {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-2 items-center justify-center">
+          {/* Share on X - PRIMARY CTA for viral growth */}
+          <button
+            onClick={shareOnX}
+            disabled={isSharing}
+            className="px-5 py-2 rounded-full text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg shadow-blue-500/30 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Share on X/Twitter"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+            {isSharing ? 'Preparing...' : 'Share on X'}
+          </button>
+
           <button
             onClick={downloadImage}
             disabled={isDownloading}
@@ -305,6 +379,7 @@ export default function ReportPage() {
           >
             Download
           </button>
+
           <button
             onClick={copyToClipboard}
             disabled={isCopying}
@@ -313,6 +388,7 @@ export default function ReportPage() {
           >
             Copy
           </button>
+
           <Link
             href={`/${year}/upload`}
             className="px-5 py-2 rounded-full text-base font-medium transition-all bg-gradient-to-r from-orange-500 to-pink-600 text-white hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/30"
