@@ -123,7 +123,7 @@ export default function ReportPage() {
       });
 
       const link = document.createElement('a');
-      link.download = `vibe-wrapped-${stats?.year || 'report'}.png`;
+      link.download = `${stats?.year || '2025'}-cc-wrapped-preview-image.png`;
       link.href = dataUrl;
       link.click();
     } catch (error) {
@@ -363,44 +363,54 @@ export default function ReportPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-2 items-center justify-center">
-          {/* Share on X - PRIMARY CTA for viral growth */}
-          <button
-            onClick={shareOnX}
-            disabled={isSharing}
-            className="px-5 py-2 rounded-full text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-blue-600 text-white hover:from-blue-600 hover:to-blue-700 shadow-lg shadow-blue-500/30 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Share on X/Twitter"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-            </svg>
-            {isSharing ? 'Preparing...' : 'Share on X'}
-          </button>
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-wrap gap-2 items-center justify-center">
+            {/* Share on X - PRIMARY CTA for viral growth */}
+            <button
+              onClick={shareOnX}
+              disabled={isSharing}
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white"
+              aria-label="Share on X/Twitter"
+            >
+              {isSharing ? 'Preparing...' : (
+                <>
+                  Share on
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                  </svg>
+                </>
+              )}
+            </button>
 
-          <button
-            onClick={downloadImage}
-            disabled={isDownloading}
-            className="px-5 py-2 rounded-full text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Download summary card as PNG"
-          >
-            Download
-          </button>
+            <button
+              onClick={downloadImage}
+              disabled={isDownloading}
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Download summary card as PNG"
+            >
+              Download
+            </button>
 
-          <button
-            onClick={copyToClipboard}
-            disabled={isCopying}
-            className="px-5 py-2 rounded-full text-base font-medium transition-all bg-gray-700/50 text-white hover:bg-gray-700 border border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-            aria-label="Copy summary card as PNG"
-          >
-            Copy
-          </button>
+            <button
+              onClick={copyToClipboard}
+              disabled={isCopying}
+              className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gray-700/50 text-white hover:bg-gray-700 border border-gray-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Copy summary card as PNG"
+            >
+              Copy
+            </button>
+          </div>
 
-          <Link
+          {/* Generate new wrapped - Small link underneath */}
+          {/* <Link
             href={`/${year}/upload`}
-            className="px-5 py-2 rounded-full text-base font-medium transition-all bg-gradient-to-r from-orange-500 to-pink-600 text-white hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/30"
+            className="text-sm text-gray-400 hover:text-gray-300 transition-colors flex items-center gap-2"
           >
-            Create New
-          </Link>
+            Generate new wrapped
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </Link> */}
         </div>
         </div>
       </div>
