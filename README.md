@@ -65,8 +65,7 @@ npx -y ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop
 - 📸 **Shareable Card**: Beautiful summary card to download or share
 
 <div align="center">
-    <img src="https://via.placeholder.com/800x400/1f2937/ffffff?text=Add+Your+Screenshot+Here" alt="Year in Code Screenshot" width="600">
-    <p><em>Replace this placeholder with an actual screenshot of your wrapped report</em></p>
+    <img src="/public/2025-cc-wrapped-preview-image.png" alt="Year in Code Screenshot" width="600">
 </div>
 
 ---
