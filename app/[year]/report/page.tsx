@@ -211,9 +211,10 @@ export default function ReportPage() {
           background: '#374151',
           color: '#fff',
           fontFamily: 'var(--font-jetbrains-mono)',
+          minWidth: '550px',
         },
         iconTheme: {
-          primary: '#1d9bf0',
+          primary: '#f97316',
           secondary: '#fff',
         },
       });
@@ -260,7 +261,12 @@ export default function ReportPage() {
 
   return (
     <>
-      <Toaster position="top-center" />
+      <Toaster
+        position="top-center"
+        containerStyle={{
+          top: '5.8rem',
+        }}
+      />
       <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-8 overflow-auto">
         <div className="w-full" style={{ maxWidth: "540px" }}>
         {/* Main Summary Card */}
