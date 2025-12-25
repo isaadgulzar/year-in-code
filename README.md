@@ -1,35 +1,84 @@
-# VibeWrapped 🎉
+<div align="center">
+    <img src="/public/logo.png" alt="Year in Code" width="120" height="120">
+    <h1>Year in Code</h1>
+    <p><strong>Transform your Claude Code usage into beautiful year-in-review reports</strong></p>
 
-Your AI Coding Year Wrapped - Generate beautiful year-in-review reports for ANY AI coding tool!
+[![GitHub](https://img.shields.io/github/stars/isaadgulzar/year-in-code?style=social)](https://github.com/isaadgulzar/year-in-code)
+[![Website](https://img.shields.io/badge/website-yearincode.xyz-orange)](https://yearincode.xyz)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Features
-
-- **🔒 Privacy First**: All processing happens client-side in your browser
-- **🎯 Multi-Tool Support**: Works with Cursor, Claude Code, GitHub Copilot, Windsurf
-- **✨ Beautiful Reports**: Stunning visualizations and insights
-- **📤 Easy Sharing**: Share on Twitter/X, download HTML reports
-- **⚡ Fast & Free**: No backend processing, completely free
-
-## 🚀 Quick Start (2 Steps!)
-
-### For Claude Code Users:
-
-**Step 1:** Generate your wrapped data JSON:
-```bash
-# macOS/Linux - saves to Desktop
-npx ccusage daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json
-
-# Windows - saves to Desktop
-npx ccusage daily --since 20250101 --until 20251231 --json > %USERPROFILE%\Desktop\my-wrapped.json
-```
-
-**Step 2:** Upload `my-wrapped.json` from your Desktop to [vibewrapped.com](https://vibewrapped.com) and get your beautiful wrapped report! 🎉
+</div>
 
 ---
 
-### For Cursor/Copilot/Windsurf Users:
+> Year-in-review reports for Claude Code users. All processing happens client-side in your browser.
 
-Support coming soon! For now, check our detailed guide: [📁 FINDING_DATA.md](FINDING_DATA.md)
+## ✨ Features
+
+- **📊 Beautiful Visualizations**: Year-long activity heatmaps, top model usage, streak tracking
+- **⚡ Simple & Fast**: Just 2 steps — generate JSON with ccusage, upload, done
+- **📸 Share Ready**: Download or copy your wrapped summary as a shareable image
+- **🔒 Client-Side Processing**: Your data stays in your browser, nothing uploaded to servers
+- **💯 Free & Open Source**: No costs, no tracking, no limits
+- **🎨 Responsive Design**: Works beautifully on desktop and mobile
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+You need [ccusage](https://github.com/ryoppippi/ccusage) to generate your usage data. No installation needed:
+
+```bash
+# Check if you have Claude Code usage data
+npx ccusage@latest daily
+```
+
+### Step 1: Generate Your Data
+
+Export your Claude Code usage as JSON:
+
+```bash
+# For 2025 data (macOS/Linux)
+npx ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped-2025.json
+
+# For 2025 data (Windows)
+npx ccusage@latest daily --since 20250101 --until 20251231 --json > %USERPROFILE%\Desktop\my-wrapped-2025.json
+
+# For 2024 data
+npx ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped-2024.json
+```
+
+> 💡 **Tip**: Always include `@latest` to ensure you're using the newest version of ccusage
+
+### Step 2: Get Your Wrapped Report
+
+1. 🌐 Visit **[yearincode.xyz](https://yearincode.xyz)**
+2. 📤 Upload your JSON file (drag & drop supported)
+3. 🎉 View your beautiful wrapped report!
+
+### What You'll Get
+
+- 📊 **Total Tokens**: See your complete token usage for the year
+- 🔥 **Longest Streak**: Your best coding consistency streak
+- 🤖 **Top 3 Models**: Most-used Claude models (Sonnet, Opus, Haiku)
+- 📅 **Activity Heatmap**: 365-day visualization of your coding activity
+- 📸 **Shareable Card**: Beautiful summary card to download or share
+
+<div align="center">
+    <img src="https://via.placeholder.com/800x400/1f2937/ffffff?text=Add+Your+Screenshot+Here" alt="Year in Code Screenshot" width="600">
+    <p><em>Replace this placeholder with an actual screenshot of your wrapped report</em></p>
+</div>
+
+---
+
+## Why Year in Code?
+
+Year in Code transforms raw Claude Code usage data into an engaging year-in-review experience:
+
+- 🎁 **Wrapped Experience**: Inspired by Spotify Wrapped and GitHub Wrapped
+- 🔧 **Simple to Use**: No complex setup, just export from ccusage and visualize
+- 🚀 **Built for ccusage**: Designed to work seamlessly with the amazing [ccusage](https://github.com/ryoppippi/ccusage) CLI
+- 💝 **Open Source**: Free for everyone to use and contribute
 
 ---
 
@@ -38,21 +87,16 @@ Support coming soon! For now, check our detailed guide: [📁 FINDING_DATA.md](F
 ### Prerequisites
 
 - Node.js 18+ installed
-- MongoDB (optional, for auth features)
 
 ### Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/vibewrapped.git
-cd vibewrapped
+git clone https://github.com/isaadgulzar/year-in-code.git
+cd year-in-code
 
 # Install dependencies
 npm install
-
-# Set up environment variables
-cp .env.local .env
-# Edit .env and add your MongoDB URI and Auth secrets
 
 # Run development server
 npm run dev
@@ -62,32 +106,24 @@ Open [http://localhost:3000](http://localhost:3000) to see the app!
 
 ## How It Works
 
-### For End Users:
+### For Users:
 
-1. **Run the command** (works with published ccusage version):
+1. **Generate your data** using the official ccusage CLI:
    ```bash
-   # macOS/Linux - saves to Desktop (2025 data)
+   # For 2025 data
    npx ccusage daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json
 
-   # Windows - saves to Desktop (2025 data)
-   npx ccusage daily --since 20250101 --until 20251231 --json > %USERPROFILE%\Desktop\my-wrapped.json
-
-   # For 2024 data, use: --since 20240101 --until 20241231
+   # For 2024 data
+   npx ccusage daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped.json
    ```
 
-2. **Upload to VibeWrapped**: Visit [vibewrapped.com](https://vibewrapped.com) and upload `my-wrapped.json` from your Desktop
+2. **Upload to Year in Code**: Visit [yearincode.xyz](https://yearincode.xyz) and upload your JSON file
 
-3. **Get Your Wrapped!** View your beautiful report with:
-   - Total tokens used
-   - Total cost
-   - Active days and streaks
-   - Top models
-   - Activity insights
-   - Share on Twitter/X or download as HTML!
+3. **Get Your Report**: View your beautiful wrapped report with detailed insights and share it!
 
 ### Privacy First 🔒
 
-All data processing happens **100% in your browser**. Your usage data never leaves your computer - we just help you visualize it beautifully!
+All data processing happens **100% client-side in your browser**. Your usage data never leaves your computer - we just help you visualize it beautifully!
 
 ## Tech Stack
 
@@ -116,54 +152,64 @@ npm run lint
 
 ## Deployment
 
-### Deploy to Vercel
+### Deploy to Vercel (Recommended)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/vibewrapped)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/isaadgulzar/year-in-code)
 
 1. Click the button above
-2. Add environment variables:
-   - `MONGODB_URI`: Your MongoDB connection string
-   - `AUTH_SECRET`: Random secret for Auth.js
-   - `GITHUB_ID` & `GITHUB_SECRET`: For GitHub OAuth (optional)
-   - `GOOGLE_ID` & `GOOGLE_SECRET`: For Google OAuth (optional)
+2. Deploy - no environment variables needed!
 
-### Manual Deployment
+### Other Platforms
 
 ```bash
 # Build the app
 npm run build
 
-# Deploy to your preferred platform
-# Vercel, Netlify, Railway, etc.
+# Deploy to Netlify, Railway, Cloudflare Pages, etc.
 ```
 
 ## Environment Variables
 
-Create a `.env.local` file:
+No environment variables required! The app works completely standalone with no backend dependencies.
 
-```env
-# Auth.js
-AUTH_SECRET=your-secret-key-here
-AUTH_URL=http://localhost:3000
+## FAQ & Tips
 
-# MongoDB (optional for auth)
-MONGODB_URI=mongodb://localhost:27017/vibewrapped
+### How do I get my usage data?
 
-# OAuth Providers (optional)
-GITHUB_ID=your-github-client-id
-GITHUB_SECRET=your-github-client-secret
-GOOGLE_ID=your-google-client-id
-GOOGLE_SECRET=your-google-client-secret
+You need the [ccusage](https://github.com/ryoppippi/ccusage) CLI. No installation required:
+
+```bash
+# Check your usage first
+npx ccusage@latest daily
+
+# Then export as JSON for Year in Code
+npx ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json
 ```
+
+### Can I use data from multiple years?
+
+Currently, each upload processes one year at a time. Multi-year comparison is on the roadmap!
+
+### What data format does it accept?
+
+Year in Code accepts JSON output from `ccusage daily --json`. The app automatically detects the ccusage format and parses it accordingly.
+
+### Can I use this with other AI coding tools?
+
+Currently, Year in Code is optimized for Claude Code data via ccusage. Support for other tools (Cursor, Copilot, etc.) may come in the future!
+
+### How do I share my wrapped report?
+
+Click the "Download" button to save your summary card as PNG, or use "Copy" to copy it to your clipboard for easy sharing on social media.
 
 ## Roadmap
 
-- [ ] Add more AI tool support (v0, Replit, etc.)
-- [ ] Multi-year comparison
-- [ ] Team analytics
-- [ ] API endpoints for programmatic access
-- [ ] Custom branding options
-- [ ] Export to PDF
+- [ ] Support for more ccusage output formats
+- [ ] Multi-year comparison view
+- [ ] More detailed model usage analytics
+- [ ] Custom color themes
+- [ ] PDF export option
+- [ ] Social media optimization (OG images)
 
 ## Contributing
 
@@ -181,16 +227,33 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## Acknowledgments
 
-- Inspired by Spotify Wrapped and GitHub Wrapped
-- Built with the amazing ccusage parser
-- Thanks to the AI coding community!
+This project wouldn't exist without:
 
-## Support
+- 🎵 **Spotify Wrapped & GitHub Wrapped**: Inspiration for the wrapped experience
+- 🔧 **[ccusage](https://github.com/ryoppippi/ccusage)** by [@ryoppippi](https://github.com/ryoppippi): The amazing CLI that powers our data generation
+- 💜 **Claude Code Community**: For making AI-assisted coding amazing
+- 🙏 **Open Source**: Built on the shoulders of giants (Next.js, Tailwind, Chart.js)
 
-- 🐛 [Report a bug](https://github.com/yourusername/vibewrapped/issues)
-- 💡 [Request a feature](https://github.com/yourusername/vibewrapped/issues)
-- 💬 [Join discussions](https://github.com/yourusername/vibewrapped/discussions)
+## Support & Community
+
+- 🐛 [Report a bug](https://github.com/isaadgulzar/year-in-code/issues)
+- 💡 [Request a feature](https://github.com/isaadgulzar/year-in-code/issues)
+- 💬 [Join discussions](https://github.com/isaadgulzar/year-in-code/discussions)
+- ⭐ [Star on GitHub](https://github.com/isaadgulzar/year-in-code) - Show your support!
+
+## Related Projects
+
+- 📊 [ccusage](https://github.com/ryoppippi/ccusage) - The official Claude Code usage analyzer CLI
+- 🌐 [yearincode.xyz](https://yearincode.xyz) - Live demo and usage
+- 📚 [ccusage documentation](https://ccusage.com/) - Full ccusage docs
 
 ---
 
-Built with ❤️ for the AI coding community
+<div align="center">
+    <p><strong>Built with ❤️ for the Claude Code community</strong></p>
+    <p>
+        <a href="https://github.com/isaadgulzar/year-in-code">GitHub</a> •
+        <a href="https://yearincode.xyz">Website</a> •
+        <a href="https://github.com/ryoppippi/ccusage">ccusage CLI</a>
+    </p>
+</div>
