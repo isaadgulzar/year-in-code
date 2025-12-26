@@ -56,16 +56,6 @@ export default function ReportPage() {
       .replace(/(\d+)\s+(\d+)/g, "$1.$2"); // Convert "4 5" to "4.5"
   };
 
-  const getTokenQuote = (tokens: number) => {
-    if (tokens >= 1000000) {
-      return "Agents run on tokens. Millions of them were yours.";
-    } else if (tokens >= 1000) {
-      return "Agents run on tokens. Thousands of them were yours.";
-    } else {
-      return "Agents run on tokens. Hundreds of them were yours.";
-    }
-  };
-
   const calculateJoinedDaysAgo = () => {
     if (!stats || !stats.dailyData || stats.dailyData.length === 0) return 0;
     const firstDate = new Date(stats.dailyData[0].date);
