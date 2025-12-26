@@ -92,7 +92,7 @@ export default function UploadPage() {
       let jsonData;
       try {
         jsonData = JSON.parse(text);
-      } catch (error) {
+      } catch {
         toast.error("Invalid JSON file. Please make sure you're uploading the output from 'npx ccusage daily --json' → Make sure you're uploading the file generated from step 1", {
           style: {
             background: '#374151',
