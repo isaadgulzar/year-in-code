@@ -31,7 +31,7 @@ export interface YearStats {
   peakHour?: number;
 }
 
-export function parseClaudeCodeData(entries: any[]): YearStats {
+export function parseClaudeCodeData(entries: UsageEntry[]): YearStats {
   console.log(`[Parser] Starting to parse ${entries.length} entries`);
 
   // Debug: Log first entry to see structure

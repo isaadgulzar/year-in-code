@@ -17,7 +17,7 @@ export default function NotFound() {
           </div>
 
           <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto font-light px-4">
-            Looks like this page took an unexpected detour. Let's get you back on track.
+            Looks like this page took an unexpected detour. Let&apos;s get you back on track.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

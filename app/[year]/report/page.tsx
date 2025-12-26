@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { toPng } from "html-to-image";
 import toast, { Toaster } from "react-hot-toast";
-import { formatNumber, formatCost, YearStats } from "@/lib/parser";
+import { formatNumber, YearStats } from "@/lib/parser";
 
 export default function ReportPage() {
   const [stats, setStats] = useState<YearStats | null>(null);

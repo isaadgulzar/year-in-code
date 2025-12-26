@@ -3,7 +3,6 @@
 import { useState, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
-import { parseClaudeCodeData } from "@/lib/parser";
 import { parseCcusageJson } from "@/lib/ccusage-parser";
 import { parseCcusageDailyJson } from "@/lib/ccusage-daily-parser";
 
@@ -12,6 +11,8 @@ export default function UploadPage() {
   const [files, setFiles] = useState<File[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
+  const [windowsShell, setWindowsShell] = useState<'powershell' | 'cmd'>('powershell');
+  const [packageManager, setPackageManager] = useState<'npm' | 'yarn' | 'pnpm' | 'bun'>('npm');
   const router = useRouter();
   const params = useParams();
   const year = params.year as string;
@@ -55,6 +56,16 @@ export default function UploadPage() {
     }, 2000);
   }, []);
 
+  const getCommandPrefix = useCallback(() => {
+    const commands = {
+      npm: 'npx -y ccusage@latest',
+      yarn: 'yarn dlx --quiet ccusage@latest',
+      pnpm: 'pnpm dlx ccusage@latest',
+      bun: 'bunx ccusage@latest',
+    };
+    return commands[packageManager];
+  }, [packageManager]);
+
   const handleProcess = async () => {
     if (files.length === 0) return;
 
@@ -81,8 +92,8 @@ export default function UploadPage() {
       let jsonData;
       try {
         jsonData = JSON.parse(text);
-      } catch (error) {
-        toast.error("Invalid JSON file. Please make sure you're uploading the output from 'npx ccusage daily --json'", {
+      } catch {
+        toast.error("Invalid JSON file. Please make sure you're uploading the output from 'npx ccusage daily --json' → Make sure you're uploading the file generated from step 1", {
           style: {
             background: '#374151',
             color: '#fff',
@@ -192,15 +203,62 @@ export default function UploadPage() {
                     <div className="flex-1">
                       <p className="font-semibold text-white mb-1 sm:mb-2 text-xs sm:text-sm">Run this command in your terminal:</p>
 
+                      {/* Package Manager Selector */}
+                      <div className="mb-3 sm:mb-4">
+                        <p className="text-gray-300 text-[10px] sm:text-xs mb-2">📦 <strong className="text-white">Choose your package manager:</strong></p>
+                        <div className="flex gap-1 sm:gap-1.5 p-1 bg-gray-900/80 rounded-lg border border-gray-700 flex-wrap">
+                          <button
+                            onClick={() => setPackageManager('npm')}
+                            className={`px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold rounded-md transition-all ${
+                              packageManager === 'npm'
+                                ? 'bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white shadow-md'
+                                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                            }`}
+                          >
+                            npm
+                          </button>
+                          <button
+                            onClick={() => setPackageManager('yarn')}
+                            className={`px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold rounded-md transition-all ${
+                              packageManager === 'yarn'
+                                ? 'bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white shadow-md'
+                                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                            }`}
+                          >
+                            yarn
+                          </button>
+                          <button
+                            onClick={() => setPackageManager('pnpm')}
+                            className={`px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold rounded-md transition-all ${
+                              packageManager === 'pnpm'
+                                ? 'bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white shadow-md'
+                                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                            }`}
+                          >
+                            pnpm
+                          </button>
+                          <button
+                            onClick={() => setPackageManager('bun')}
+                            className={`px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold rounded-md transition-all ${
+                              packageManager === 'bun'
+                                ? 'bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white shadow-md'
+                                : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                            }`}
+                          >
+                            bun
+                          </button>
+                        </div>
+                      </div>
+
                       {/* macOS/Linux */}
                       <div className="mb-1 sm:mb-2">
                         <p className="text-gray-400 text-[10px] sm:text-xs mb-1">🍎 <strong>macOS/Linux:</strong></p>
                         <div className="relative group">
                           <div className="bg-gray-900 rounded p-1.5 sm:p-2 pr-8 font-mono text-[10px] sm:text-xs text-green-400 overflow-x-auto">
-                            npx -y ccusage@latest daily --since {year}0101 --until {year}1231 --json &gt; ~/Desktop/my-wrapped-{year}.json
+                            {getCommandPrefix()} daily --since {year}0101 --until {year}1231 --json &gt; ~/Desktop/my-wrapped-{year}.json
                           </div>
                           <button
-                            onClick={() => copyCommand(`npx -y ccusage@latest daily --since ${year}0101 --until ${year}1231 --json > ~/Desktop/my-wrapped-${year}.json`, 'mac')}
+                            onClick={() => copyCommand(`${getCommandPrefix()} daily --since ${year}0101 --until ${year}1231 --json > ~/Desktop/my-wrapped-${year}.json`, 'mac')}
                             className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-800 rounded transition-colors"
                             title="Copy command"
                           >
@@ -219,17 +277,49 @@ export default function UploadPage() {
 
                       {/* Windows */}
                       <div className="mb-1 sm:mb-2">
-                        <p className="text-gray-400 text-[10px] sm:text-xs mb-1">🪟 <strong>Windows:</strong></p>
+                        <div className="flex items-center gap-2 sm:gap-3 mb-2">
+                          <p className="text-gray-300 text-[10px] sm:text-xs">🪟 <strong className="text-white">Windows:</strong></p>
+                          <div className="flex gap-0.5 sm:gap-1 p-1 bg-gray-900/80 rounded-lg border border-gray-700">
+                            <button
+                              onClick={() => setWindowsShell('powershell')}
+                              className={`px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold rounded-md transition-all ${
+                                windowsShell === 'powershell'
+                                  ? 'bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white shadow-md'
+                                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                              }`}
+                            >
+                              PowerShell
+                            </button>
+                            <button
+                              onClick={() => setWindowsShell('cmd')}
+                              className={`px-3 sm:px-4 py-1 sm:py-1.5 text-[10px] sm:text-xs font-semibold rounded-md transition-all ${
+                                windowsShell === 'cmd'
+                                  ? 'bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 text-white shadow-md'
+                                  : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                              }`}
+                            >
+                              CMD
+                            </button>
+                          </div>
+                        </div>
                         <div className="relative group">
-                          <div className="bg-gray-900 rounded p-1.5 sm:p-2 pr-8 font-mono text-[10px] sm:text-xs text-green-400 overflow-x-auto">
-                            npx -y ccusage@latest daily --since {year}0101 --until {year}1231 --json &gt; %USERPROFILE%\Desktop\my-wrapped-{year}.json
+                          <div className="bg-gray-900 rounded p-1.5 sm:p-2 pr-8 font-mono text-[9px] sm:text-[11px] text-green-400 overflow-x-auto">
+                            {windowsShell === 'powershell'
+                              ? `${getCommandPrefix()} daily --since ${year}0101 --until ${year}1231 --json > "$HOME\\Desktop\\my-wrapped-${year}.json"`
+                              : `${getCommandPrefix()} daily --since ${year}0101 --until ${year}1231 --json > "%USERPROFILE%\\Desktop\\my-wrapped-${year}.json"`
+                            }
                           </div>
                           <button
-                            onClick={() => copyCommand(`npx -y ccusage@latest daily --since ${year}0101 --until ${year}1231 --json > %USERPROFILE%\\Desktop\\my-wrapped-${year}.json`, 'windows')}
+                            onClick={() => {
+                              const cmd = windowsShell === 'powershell'
+                                ? `${getCommandPrefix()} daily --since ${year}0101 --until ${year}1231 --json > "$HOME\\Desktop\\my-wrapped-${year}.json"`
+                                : `${getCommandPrefix()} daily --since ${year}0101 --until ${year}1231 --json > "%USERPROFILE%\\Desktop\\my-wrapped-${year}.json"`;
+                              copyCommand(cmd, `windows-${windowsShell}`);
+                            }}
                             className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-800 rounded transition-colors"
                             title="Copy command"
                           >
-                            {copiedCommand === 'windows' ? (
+                            {copiedCommand === `windows-${windowsShell}` ? (
                               <svg className="w-3.5 h-3.5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                               </svg>
