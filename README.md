@@ -108,6 +108,7 @@ Open [http://localhost:3000](http://localhost:3000) to see the app!
 ### For Users:
 
 1. **Generate your data** using the official ccusage CLI:
+
    ```bash
    # For 2025 data
    npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json

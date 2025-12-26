@@ -23,6 +23,7 @@ A step-by-step guide to locate your usage data for different AI coding tools.
 6. Inside each project folder, you'll find `.jsonl` files
 
 **Show Hidden Files Permanently:**
+
 - Press `Cmd + Shift + .` (dot) in Finder to toggle hidden files
 
 ### macOS - Method 2: Terminal
@@ -61,6 +62,7 @@ cp -r ~/.claude/projects ~/Desktop/claude-data
 6. Inside each project folder, you'll find `.jsonl` files
 
 **Show Hidden Files Permanently:**
+
 1. Open File Explorer
 2. Click `View` tab
 3. Check `Hidden items`
@@ -104,11 +106,13 @@ Copy-Item -Path ~/.claude/projects -Destination ~/Desktop/claude-data -Recurse
 ### macOS
 
 **Finder (Cmd + Shift + G):**
+
 ```
 ~/.cursor/logs
 ```
 
 **Terminal:**
+
 ```bash
 cd ~/.cursor/logs
 ls -la
@@ -117,11 +121,13 @@ ls -la
 ### Windows
 
 **File Explorer:**
+
 ```
 %USERPROFILE%\.cursor\logs
 ```
 
 **PowerShell:**
+
 ```powershell
 cd ~/.cursor/logs
 Get-ChildItem
@@ -146,11 +152,13 @@ GitHub Copilot doesn't store local usage logs. You need to:
 ### macOS
 
 **Finder (Cmd + Shift + G):**
+
 ```
 ~/.windsurf/logs
 ```
 
 **Terminal:**
+
 ```bash
 cd ~/.windsurf/logs
 ls -la
@@ -159,6 +167,7 @@ ls -la
 ### Windows
 
 **File Explorer:**
+
 ```
 %USERPROFILE%\.windsurf\logs
 ```
@@ -230,20 +239,25 @@ Your data files will look like this:
 ## ⚠️ Troubleshooting
 
 ### "Folder doesn't exist"
+
 - Try both paths (`~/.claude` and `~/.config/claude`)
 - Make sure you have Claude Code installed
 - Make sure you've actually used Claude Code (files are created after first use)
 
 ### "Permission denied"
+
 **macOS:**
+
 ```bash
 sudo ls ~/.claude/projects
 ```
 
 **Windows:**
+
 - Run Command Prompt/PowerShell as Administrator
 
 ### "No files found"
+
 - Check if you've used Claude Code recently (files are created after usage)
 - Try the alternate path
 - Contact Claude support if you're sure you've used it
@@ -264,6 +278,7 @@ sudo ls ~/.claude/projects
 Run this diagnostic command:
 
 **macOS/Linux:**
+
 ```bash
 echo "Checking for Claude Code data..."
 [ -d ~/.claude/projects ] && echo "✅ Found at ~/.claude/projects" || echo "❌ Not found"
@@ -271,6 +286,7 @@ echo "Checking for Claude Code data..."
 ```
 
 **Windows PowerShell:**
+
 ```powershell
 Write-Host "Checking for Claude Code data..."
 Test-Path "$env:USERPROFILE\.claude\projects" | ForEach-Object {
