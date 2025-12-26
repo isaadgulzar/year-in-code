@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     siteName: "Year in Code",
     images: [
       {
-        url: "/year-in-code-og-image.png",
+        url: "/year-in-code-og-image.png?v=2",
         width: 1200,
         height: 630,
         alt: "Year in Code - AI Coding Year Wrapped",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Year in Code - Your AI Coding Year Wrapped",
     description: "Generate beautiful Spotify Wrapped-style reports for your Claude Code usage. 100% privacy-first.",
-    images: ["/year-in-code-og-image.png"],
+    images: ["/year-in-code-og-image.png?v=2"],
     // Add your Twitter handle here when you have one
     // creator: "@yourtwitterhandle",
   },
