@@ -1,13 +1,20 @@
 // Reused from ccusage with modifications for client-side use
 
 export interface UsageEntry {
-  timestamp: string;
+  timestamp?: string;
+  createdAt?: string; // Alternative timestamp field
   modelName?: string;
+  model?: string; // Alternative model field
   inputTokens?: number;
+  input_tokens?: number; // Alternative snake_case field
   outputTokens?: number;
+  output_tokens?: number; // Alternative snake_case field
   cacheCreationTokens?: number;
+  cache_creation_tokens?: number; // Alternative snake_case field
   cacheReadTokens?: number;
+  cache_read_tokens?: number; // Alternative snake_case field
   costUSD?: number;
+  cost?: number; // Alternative cost field
 }
 
 export interface DailyStats {
