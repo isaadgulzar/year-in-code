@@ -9,6 +9,10 @@
 
 </div>
 
+<div align="center">
+    <img src="/public/year-in-code-og-image.png" alt="Year in Code Screenshot" width="600">
+</div>
+
 ---
 
 > Year-in-review reports for Claude Code users. All processing happens client-side in your browser.
