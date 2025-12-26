@@ -16,6 +16,28 @@ export const metadata: Metadata = {
   title: "Year in Code - Your AI Coding Year Wrapped",
   description: "Generate beautiful Spotify Wrapped-style reports for your Claude Code usage. See your tokens, streaks, top models, and more. 100% privacy-first, completely free.",
 
+  // Icons
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/logo.png',
+      },
+    ],
+  },
+
+  // Manifest for PWA
+  manifest: '/manifest.json',
+
   // Open Graph (Facebook, LinkedIn, Discord)
   openGraph: {
     title: "Year in Code - Your AI Coding Year Wrapped",
