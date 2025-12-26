@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from 'next/link'
 
 export default function NotFound() {
   return (
@@ -17,7 +17,8 @@ export default function NotFound() {
           </div>
 
           <p className="text-lg sm:text-xl md:text-2xl text-gray-300 mb-8 sm:mb-10 md:mb-12 max-w-2xl mx-auto font-light px-4">
-            Looks like this page took an unexpected detour. Let&apos;s get you back on track.
+            Looks like this page took an unexpected detour. Let&apos;s get you
+            back on track.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -37,13 +38,23 @@ export default function NotFound() {
 
           {/* Decorative Elements */}
           <div className="mt-12 sm:mt-14 md:mt-16 flex items-center justify-center gap-2 text-xs sm:text-sm text-gray-500">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             <span>Error code: 404</span>
           </div>
         </div>
       </main>
     </div>
-  );
+  )
 }

@@ -1,88 +1,95 @@
 // Reused from ccusage with modifications for client-side use
 
 export interface UsageEntry {
-  timestamp?: string;
-  createdAt?: string; // Alternative timestamp field
-  modelName?: string;
-  model?: string; // Alternative model field
-  inputTokens?: number;
-  input_tokens?: number; // Alternative snake_case field
-  outputTokens?: number;
-  output_tokens?: number; // Alternative snake_case field
-  cacheCreationTokens?: number;
-  cache_creation_tokens?: number; // Alternative snake_case field
-  cacheReadTokens?: number;
-  cache_read_tokens?: number; // Alternative snake_case field
-  costUSD?: number;
-  cost?: number; // Alternative cost field
+  timestamp?: string
+  createdAt?: string // Alternative timestamp field
+  modelName?: string
+  model?: string // Alternative model field
+  inputTokens?: number
+  input_tokens?: number // Alternative snake_case field
+  outputTokens?: number
+  output_tokens?: number // Alternative snake_case field
+  cacheCreationTokens?: number
+  cache_creation_tokens?: number // Alternative snake_case field
+  cacheReadTokens?: number
+  cache_read_tokens?: number // Alternative snake_case field
+  costUSD?: number
+  cost?: number // Alternative cost field
 }
 
 export interface DailyStats {
-  date: string;
-  tokens: number;
-  cost: number;
-  models: Map<string, number>;
+  date: string
+  tokens: number
+  cost: number
+  models: Map<string, number>
 }
 
 export interface YearStats {
-  year: number;
-  totalTokens: number;
-  totalCost: number;
-  activeDays: number;
-  currentStreak: number;
-  longestStreak: number;
-  totalSessions: number;
-  topModels: Array<{ model: string; tokens: number; percentage: number }>;
-  dailyData: DailyStats[];
-  peakDay: string;
-  peakHour?: number;
+  year: number
+  totalTokens: number
+  totalCost: number
+  activeDays: number
+  currentStreak: number
+  longestStreak: number
+  totalSessions: number
+  topModels: Array<{ model: string; tokens: number; percentage: number }>
+  dailyData: DailyStats[]
+  peakDay: string
+  peakHour?: number
 }
 
 export function parseClaudeCodeData(entries: UsageEntry[]): YearStats {
-  console.log(`[Parser] Starting to parse ${entries.length} entries`);
+  console.log(`[Parser] Starting to parse ${entries.length} entries`)
 
   // Debug: Log first entry to see structure
   if (entries.length > 0) {
-    console.log("[Parser] Sample entry:", JSON.stringify(entries[0], null, 2).substring(0, 500));
-    console.log("[Parser] Entry keys:", Object.keys(entries[0]));
+    console.log(
+      '[Parser] Sample entry:',
+      JSON.stringify(entries[0], null, 2).substring(0, 500)
+    )
+    console.log('[Parser] Entry keys:', Object.keys(entries[0]))
   }
 
-  const dailyMap = new Map<string, DailyStats>();
-  const modelMap = new Map<string, number>();
-  let totalTokens = 0;
-  let totalCost = 0;
-  let processedCount = 0;
-  let skippedCount = 0;
+  const dailyMap = new Map<string, DailyStats>()
+  const modelMap = new Map<string, number>()
+  let totalTokens = 0
+  let totalCost = 0
+  let processedCount = 0
+  let skippedCount = 0
 
   // Process each entry
   for (const entry of entries) {
     try {
-      const timestamp = entry.timestamp || entry.createdAt || "";
+      const timestamp = entry.timestamp || entry.createdAt || ''
       if (!timestamp) {
-        skippedCount++;
+        skippedCount++
         if (skippedCount < 5) {
-          console.log("[Parser] Skipping entry - no timestamp:", Object.keys(entry));
+          console.log(
+            '[Parser] Skipping entry - no timestamp:',
+            Object.keys(entry)
+          )
         }
-        continue;
+        continue
       }
 
-      const date = timestamp.split("T")[0]; // YYYY-MM-DD
+      const date = timestamp.split('T')[0] // YYYY-MM-DD
       if (!date) {
-        skippedCount++;
-        continue;
+        skippedCount++
+        continue
       }
 
-      const inputTokens = entry.inputTokens || entry.input_tokens || 0;
-      const outputTokens = entry.outputTokens || entry.output_tokens || 0;
-      const cacheCreation = entry.cacheCreationTokens || entry.cache_creation_tokens || 0;
-      const cacheRead = entry.cacheReadTokens || entry.cache_read_tokens || 0;
-      const cost = entry.costUSD || entry.cost || 0;
-      const model = entry.modelName || entry.model || "unknown";
+      const inputTokens = entry.inputTokens || entry.input_tokens || 0
+      const outputTokens = entry.outputTokens || entry.output_tokens || 0
+      const cacheCreation =
+        entry.cacheCreationTokens || entry.cache_creation_tokens || 0
+      const cacheRead = entry.cacheReadTokens || entry.cache_read_tokens || 0
+      const cost = entry.costUSD || entry.cost || 0
+      const model = entry.modelName || entry.model || 'unknown'
 
-      const tokens = inputTokens + outputTokens + cacheCreation + cacheRead;
+      const tokens = inputTokens + outputTokens + cacheCreation + cacheRead
 
       if (tokens > 0) {
-        processedCount++;
+        processedCount++
       }
 
       // Update daily stats
@@ -92,82 +99,90 @@ export function parseClaudeCodeData(entries: UsageEntry[]): YearStats {
           tokens: 0,
           cost: 0,
           models: new Map(),
-        });
+        })
       }
 
-      const dayStats = dailyMap.get(date)!;
-      dayStats.tokens += tokens;
-      dayStats.cost += cost;
-      dayStats.models.set(model, (dayStats.models.get(model) || 0) + tokens);
+      const dayStats = dailyMap.get(date)!
+      dayStats.tokens += tokens
+      dayStats.cost += cost
+      dayStats.models.set(model, (dayStats.models.get(model) || 0) + tokens)
 
       // Update model stats
-      modelMap.set(model, (modelMap.get(model) || 0) + tokens);
+      modelMap.set(model, (modelMap.get(model) || 0) + tokens)
 
       // Update totals
-      totalTokens += tokens;
-      totalCost += cost;
+      totalTokens += tokens
+      totalCost += cost
     } catch (error) {
-      console.warn("Failed to parse entry:", error);
+      console.warn('Failed to parse entry:', error)
     }
   }
 
   // Convert to arrays and sort
   const dailyData = Array.from(dailyMap.values()).sort((a, b) =>
     a.date.localeCompare(b.date)
-  );
+  )
 
   // Calculate streaks
-  let longestStreak = 0;
-  let currentStreak = 0;
+  let longestStreak = 0
+  let currentStreak = 0
 
   for (let i = 0; i < dailyData.length; i++) {
     if (i === 0) {
-      currentStreak = 1;
+      currentStreak = 1
     } else {
-      const prev = new Date(dailyData[i - 1].date);
-      const curr = new Date(dailyData[i].date);
+      const prev = new Date(dailyData[i - 1].date)
+      const curr = new Date(dailyData[i].date)
       const diffDays = Math.floor(
         (curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24)
-      );
+      )
 
       if (diffDays === 1) {
-        currentStreak++;
+        currentStreak++
       } else {
-        longestStreak = Math.max(longestStreak, currentStreak);
-        currentStreak = 1;
+        longestStreak = Math.max(longestStreak, currentStreak)
+        currentStreak = 1
       }
     }
   }
-  longestStreak = Math.max(longestStreak, currentStreak);
+  longestStreak = Math.max(longestStreak, currentStreak)
 
   // Top models
   const topModels = Array.from(modelMap.entries())
     .map(([model, tokens]) => ({
-      model: model.replace("claude-", "").replace(/-\d{8}/g, ""),
+      model: model.replace('claude-', '').replace(/-\d{8}/g, ''),
       tokens,
       percentage: totalTokens > 0 ? (tokens / totalTokens) * 100 : 0,
     }))
     .sort((a, b) => b.tokens - a.tokens)
-    .slice(0, 5);
+    .slice(0, 5)
 
   // Find peak day
-  const peakDayData = dailyData.reduce((max, day) =>
-    day.tokens > max.tokens ? day : max
-  , dailyData[0] || { date: "", tokens: 0 });
+  const peakDayData = dailyData.reduce(
+    (max, day) => (day.tokens > max.tokens ? day : max),
+    dailyData[0] || { date: '', tokens: 0 }
+  )
 
   const peakDay = peakDayData.date
-    ? new Date(peakDayData.date).toLocaleDateString("en-US", { weekday: "long" })
-    : "Unknown";
+    ? new Date(peakDayData.date).toLocaleDateString('en-US', {
+        weekday: 'long',
+      })
+    : 'Unknown'
 
-  const year = dailyData[0]?.date ? new Date(dailyData[0].date).getFullYear() : new Date().getFullYear();
+  const year = dailyData[0]?.date
+    ? new Date(dailyData[0].date).getFullYear()
+    : new Date().getFullYear()
 
-  console.log("[Parser] Summary:");
-  console.log(`  - Processed entries: ${processedCount}`);
-  console.log(`  - Skipped entries: ${skippedCount}`);
-  console.log(`  - Total tokens: ${totalTokens}`);
-  console.log(`  - Total cost: $${totalCost.toFixed(2)}`);
-  console.log(`  - Active days: ${dailyData.length}`);
-  console.log(`  - Top models:`, topModels.map(m => m.model));
+  console.log('[Parser] Summary:')
+  console.log(`  - Processed entries: ${processedCount}`)
+  console.log(`  - Skipped entries: ${skippedCount}`)
+  console.log(`  - Total tokens: ${totalTokens}`)
+  console.log(`  - Total cost: $${totalCost.toFixed(2)}`)
+  console.log(`  - Active days: ${dailyData.length}`)
+  console.log(
+    `  - Top models:`,
+    topModels.map(m => m.model)
+  )
 
   return {
     year,
@@ -180,22 +195,22 @@ export function parseClaudeCodeData(entries: UsageEntry[]): YearStats {
     topModels,
     dailyData,
     peakDay,
-  };
+  }
 }
 
 export function formatNumber(num: number): string {
   if (num >= 1_000_000_000) {
-    return (num / 1_000_000_000).toFixed(1) + "B";
+    return (num / 1_000_000_000).toFixed(1) + 'B'
   }
   if (num >= 1_000_000) {
-    return (num / 1_000_000).toFixed(1) + "M";
+    return (num / 1_000_000).toFixed(1) + 'M'
   }
   if (num >= 1_000) {
-    return (num / 1_000).toFixed(1) + "K";
+    return (num / 1_000).toFixed(1) + 'K'
   }
-  return num.toString();
+  return num.toString()
 }
 
 export function formatCost(amount: number): string {
-  return `$${amount.toFixed(2)}`;
+  return `$${amount.toFixed(2)}`
 }

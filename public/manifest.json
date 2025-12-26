@@ -21,11 +21,7 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": [
-    "developer tools",
-    "productivity",
-    "analytics"
-  ],
+  "categories": ["developer tools", "productivity", "analytics"],
   "screenshots": [
     {
       "src": "/year-in-code-og-image.png",
