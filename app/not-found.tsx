@@ -1,24 +1,10 @@
 import Link from "next/link";
-import Image from "next/image";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex items-center justify-center overflow-y-auto">
+    <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white flex items-center justify-center">
       <main className="container mx-auto px-4 sm:px-6 py-8">
         <div className="text-center max-w-4xl mx-auto">
-          <div className="mb-8 flex flex-col items-center gap-4">
-            <Link href="/" className="inline-block">
-              <Image
-                src="/logo.png"
-                alt="Year in Code Logo"
-                width={400}
-                height={200}
-                className="w-20 h-auto sm:w-24 md:w-36 hover:opacity-80 transition-opacity"
-                priority
-              />
-            </Link>
-          </div>
-
           <div className="mb-6 sm:mb-8">
             <h1 className="text-7xl sm:text-8xl md:text-9xl lg:text-[12rem] font-bold mb-3 sm:mb-4 leading-none">
               <span className="bg-gradient-to-r from-orange-400 via-pink-500 to-purple-600 text-transparent bg-clip-text">
