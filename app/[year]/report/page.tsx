@@ -52,7 +52,7 @@ export default function ReportPage() {
               urlUsername,
               parseInt(year)
             )
-            const stats = parseGitHubStats(githubStats)
+            const stats = parseGitHubStats(githubStats, parseInt(year))
 
             // Store in sessionStorage
             sessionStorage.setItem('wrappedStats', JSON.stringify(stats))
@@ -378,20 +378,20 @@ export default function ReportPage() {
 
   if (!stats) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center px-4">
+        <div className="text-center w-full max-w-md mx-auto flex flex-col items-center">
           <Image
             src="/loader.gif"
             alt="Loading..."
             width={128}
             height={128}
-            className="w-32 h-32 mx-auto"
+            className="w-32 h-32"
             unoptimized
           />
-          <p className="text-xl text-white font-semibold mb-2 -mt-8">
+          <p className="text-base sm:text-lg md:text-xl text-white font-semibold mb-2 -mt-8">
             Crunching your code history...
           </p>
-          <p className="text-sm text-gray-400">
+          <p className="text-xs sm:text-sm text-gray-400">
             Counting commits, calculating streaks, and crafting your story ✨
           </p>
         </div>
@@ -441,7 +441,7 @@ export default function ReportPage() {
           {/* Main Summary Card */}
           <div
             ref={cardRef}
-            className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-5 md:p-8 border border-gray-700/50 shadow-2xl mb-6"
+            className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-5 md:p-8 border border-gray-700/50 shadow-2xl mb-2"
           >
             <div className="flex flex-col md:flex-row gap-8 md:items-center">
               {/* Left Column - Stats Content */}
@@ -524,7 +524,9 @@ export default function ReportPage() {
                   )}
                 </div>
                 <div className="mb-4 md:mb-8">
-                  {selectedTool === 'github' && stats.yearsOfCoding ? (
+                  {selectedTool === 'github' &&
+                  stats.yearsOfCoding &&
+                  stats.yearsOfCoding > 0 ? (
                     <div className="mb-4 md:mb-8">
                       <p className="text-base md:text-lg font-bold flex items-center gap-2">
                         <span className="text-xl md:text-2xl">🎯</span>
@@ -539,6 +541,10 @@ export default function ReportPage() {
                         </span>
                       </p>
                     </div>
+                  ) : selectedTool === 'github' && stats.yearsOfCoding === 0 ? (
+                    <p className="text-base md:text-lg text-gray-400 mb-4 md:mb-8">
+                      Not coding yet this year 🌱
+                    </p>
                   ) : (
                     <p className="text-base md:text-lg text-gray-400 mb-4 md:mb-8">
                       Joined {joinedDaysAgo} Days Ago
@@ -716,7 +722,7 @@ export default function ReportPage() {
                 </div>
 
                 {/* Footer - URL - Horizontal on mobile, vertical on desktop */}
-                <div className="flex md:flex-col items-end md:items-start gap-3 md:gap-2 text-gray-400 mt-0 md:mt-2">
+                <div className="flex md:flex-col items-end  md:items-start gap-3 md:gap-2 text-gray-400 mt-2">
                   <Image
                     src="/logo.png"
                     alt="Year in Code Logo"
@@ -787,54 +793,88 @@ export default function ReportPage() {
             </div>
           </div>
 
+          {/* Tip Message */}
+          <div className="text-center mb-4">
+            <p className="text-xs text-gray-500">
+              💡 Change year in URL to view past years
+            </p>
+          </div>
+
           {/* Action Buttons */}
-          <div className="flex flex-col items-center gap-3 w-full">
-            <div className="flex gap-5 items-center justify-between w-full">
-              <Link
-                href={`/${year}/upload${selectedTool === 'github' ? '?tab=github' : ''}`}
-                className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gray-700/50 text-white hover:bg-gray-700 border border-gray-600 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
+          <div className="flex flex-col items-center gap-3 w-full px-8 sm:px-0">
+            {/* Desktop Back Link - Above buttons */}
+            <Link
+              href={`/${year}/upload${selectedTool === 'github' ? '?tab=github' : ''}`}
+              className="hidden sm:flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-300 transition-colors self-start"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
               >
-                Go Back
-              </Link>
-              <div className="flex flex-wrap gap-2 items-center justify-center">
-                <button
-                  onClick={copyToClipboard}
-                  disabled={isCopying}
-                  className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
-                  aria-label="Copy summary card as PNG"
-                >
-                  Copy
-                </button>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Back
+            </Link>
 
-                <button
-                  onClick={downloadImage}
-                  disabled={isDownloading}
-                  className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gradient-to-r from-orange-500 to-pink-600 cursor-pointer text-white hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/30"
-                  aria-label="Download summary card as PNG"
-                >
-                  Download
-                </button>
+            {/* Main Buttons - Centered */}
+            <div className="flex gap-1.5 sm:gap-2 items-center justify-center w-full">
+              {/* Copy Button */}
+              <button
+                onClick={copyToClipboard}
+                disabled={isCopying}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
+                aria-label="Copy summary card as PNG"
+              >
+                Copy
+              </button>
 
-                {/* Share on X - PRIMARY CTA for viral growth */}
-                <button
-                  onClick={shareOnX}
-                  disabled={isSharing}
-                  className="px-5 py-2 rounded-xl text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white hover:scale-105 transform"
-                  aria-label="Share on X/Twitter"
+              {/* Download Button */}
+              <button
+                onClick={downloadImage}
+                disabled={isDownloading}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-gradient-to-r from-orange-500 to-pink-600 cursor-pointer text-white hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/30 hover:scale-105 transform"
+                aria-label="Download summary card as PNG"
+              >
+                Download
+              </button>
+
+              {/* Share on X */}
+              <button
+                onClick={shareOnX}
+                disabled={isSharing}
+                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white hover:scale-105 transform"
+                aria-label="Share on X/Twitter"
+              >
+                Share on
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <>
-                    Share on
-                    <svg
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
-                  </>
-                </button>
-              </div>
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </button>
             </div>
+
+            {/* Back Link - Mobile only, underneath buttons */}
+            <Link
+              href={`/${year}/upload${selectedTool === 'github' ? '?tab=github' : ''}`}
+              className="sm:hidden text-sm text-gray-400 hover:text-gray-300 transition-colors flex items-center gap-1"
+            >
+              <span className="text-base">←</span>
+              Go back
+            </Link>
+          </div>
+
+          <div className="hidden">
+            {/* Placeholder to maintain layout */}
 
             {/* Generate new wrapped - Small link underneath */}
             {/* <Link
