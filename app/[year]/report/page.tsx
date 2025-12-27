@@ -195,7 +195,7 @@ export default function ReportPage() {
       ])
 
       // Step 2: Show toast with countdown
-      let countdown = 3
+      let countdown = 2
       const toastId = toast.success(
         `Image copied! Paste it in your tweet in ${countdown}s`,
         {
@@ -240,7 +240,7 @@ export default function ReportPage() {
         }
       }, 1000)
 
-      // Step 3: Open Twitter in new tab after 3s delay
+      // Step 3: Open Twitter in new tab after 2s delay
       setTimeout(() => {
         const text = encodeURIComponent(
           `Wrapped my ${stats?.year} with Claude Code 🚀\n\n💪 Crushed ${formatNumber(
@@ -257,7 +257,7 @@ export default function ReportPage() {
         const twitterUrl = `https://twitter.com/intent/tweet?text=${text}`
 
         window.open(twitterUrl, '_blank')
-      }, 3000)
+      }, 2000)
     } catch (error) {
       console.error('Error preparing to share:', error)
       toast.error('Failed to copy image. Please try again.', {
