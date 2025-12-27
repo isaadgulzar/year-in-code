@@ -802,65 +802,69 @@ export default function ReportPage() {
 
           {/* Action Buttons */}
           <div className="flex flex-col items-center gap-3 w-full px-8 sm:px-0">
-            {/* Desktop Back Link - Above buttons */}
-            <Link
-              href={`/${year}/upload${selectedTool === 'github' ? '?tab=github' : ''}`}
-              className="hidden sm:flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-300 transition-colors self-start"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
+            {/* Desktop: Back button on left, action buttons on right in one row */}
+            {/* Mobile: Centered action buttons */}
+            <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 items-center justify-center sm:justify-between w-full">
+              {/* Back Button - Desktop only */}
+              <Link
+                href={`/${year}/upload${selectedTool === 'github' ? '?tab=github' : ''}`}
+                className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl text-base font-medium transition-all bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 hover:scale-105 transform text-white"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              Back
-            </Link>
-
-            {/* Main Buttons - Centered */}
-            <div className="flex gap-1.5 sm:gap-2 items-center justify-center w-full">
-              {/* Copy Button */}
-              <button
-                onClick={copyToClipboard}
-                disabled={isCopying}
-                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
-                aria-label="Copy summary card as PNG"
-              >
-                Copy
-              </button>
-
-              {/* Download Button */}
-              <button
-                onClick={downloadImage}
-                disabled={isDownloading}
-                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-gradient-to-r from-orange-500 to-pink-600 cursor-pointer text-white hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/30 hover:scale-105 transform"
-                aria-label="Download summary card as PNG"
-              >
-                Download
-              </button>
-
-              {/* Share on X */}
-              <button
-                onClick={shareOnX}
-                disabled={isSharing}
-                className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white hover:scale-105 transform"
-                aria-label="Share on X/Twitter"
-              >
-                Share on
                 <svg
                   className="w-4 h-4"
-                  fill="currentColor"
+                  fill="none"
+                  stroke="currentColor"
                   viewBox="0 0 24 24"
+                  strokeWidth={2}
                 >
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
-              </button>
+                Back
+              </Link>
+
+              {/* Action Buttons Group */}
+              <div className="flex gap-1.5 sm:gap-2 items-center">
+                {/* Copy Button */}
+                <button
+                  onClick={copyToClipboard}
+                  disabled={isCopying}
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-white text-black hover:bg-gray-100 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 transform"
+                  aria-label="Copy summary card as PNG"
+                >
+                  Copy
+                </button>
+
+                {/* Download Button */}
+                <button
+                  onClick={downloadImage}
+                  disabled={isDownloading}
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-gradient-to-r from-orange-500 to-pink-600 cursor-pointer text-white hover:from-orange-600 hover:to-pink-700 shadow-lg shadow-orange-500/30 hover:scale-105 transform"
+                  aria-label="Download summary card as PNG"
+                >
+                  Download
+                </button>
+
+                {/* Share on X */}
+                <button
+                  onClick={shareOnX}
+                  disabled={isSharing}
+                  className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl text-sm sm:text-base font-medium transition-all bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed text-white hover:scale-105 transform"
+                  aria-label="Share on X/Twitter"
+                >
+                  Share on
+                  <svg
+                    className="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* Back Link - Mobile only, underneath buttons */}
