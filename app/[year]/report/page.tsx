@@ -40,15 +40,11 @@ export default function ReportPage() {
       // If URL has GitHub params but no sessionStorage, fetch the data
       if (urlTab === 'github' && urlUsername && !statsData) {
         try {
-          toast.loading('Fetching GitHub data...', { id: 'github-fetch' })
-
           const githubStats = await fetchGitHubUserStats(
             urlUsername,
             parseInt(year)
           )
           const stats = parseGitHubStats(githubStats)
-
-          toast.dismiss('github-fetch')
 
           // Store in sessionStorage
           sessionStorage.setItem('wrappedStats', JSON.stringify(stats))
@@ -59,8 +55,11 @@ export default function ReportPage() {
           setSelectedTool('github')
           setGithubUsername(urlUsername)
         } catch (error) {
-          toast.dismiss('github-fetch')
-          toast.error('Failed to fetch GitHub data')
+          toast.error('Failed to fetch GitHub data', {
+            style: {
+              fontSize: '14px',
+            },
+          })
           console.error('Error fetching GitHub data:', error)
           router.push(`/${year}/upload`)
           return
@@ -397,14 +396,14 @@ export default function ReportPage() {
         <div className="w-full" style={{ maxWidth: '540px' }}>
           {/* Language Selector (GitHub only) */}
           {selectedTool === 'github' && stats && stats.topModels.length > 0 && (
-            <div className="mb-4 flex items-center gap-3 max-w-full">
+            <div className="mb-4 flex items-center justify-between gap-3">
               <label className="text-sm text-gray-400 whitespace-nowrap flex-shrink-0">
                 Show fav top language!
               </label>
               <select
                 value={selectedLanguageIndex}
                 onChange={e => setSelectedLanguageIndex(Number(e.target.value))}
-                className="bg-gray-800 border border-gray-700 text-white text-xs rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none flex-1 min-w-0 truncate"
+                className="bg-gray-800 border border-gray-700 text-white text-xs rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none flex-1 min-w-0 md:flex-initial md:w-40 truncate"
               >
                 <option value={0}>None</option>
                 {stats.topModels.map((lang, index) => (
@@ -501,9 +500,9 @@ export default function ReportPage() {
                     </div>
                   )}
                 </div>
-                <div className="mb-6 md:mb-8">
+                <div className="mb-4 md:mb-8">
                   {selectedTool === 'github' && stats.yearsOfCoding ? (
-                    <div className="mb-6 md:mb-8">
+                    <div className="mb-4 md:mb-8">
                       <p className="text-base md:text-lg font-bold flex items-center gap-2">
                         <span className="text-xl md:text-2xl">🎯</span>
                         <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-transparent bg-clip-text">
@@ -518,13 +517,13 @@ export default function ReportPage() {
                       </p>
                     </div>
                   ) : (
-                    <p className="text-base md:text-lg text-gray-400 mb-6 md:mb-8">
+                    <p className="text-base md:text-lg text-gray-400 mb-4 md:mb-8">
                       Joined {joinedDaysAgo} Days Ago
                     </p>
                   )}
 
                   {/* Models/Stats Section */}
-                  <div className="mb-6 md:mb-8">
+                  <div className="mb-4 md:mb-8">
                     {selectedTool === 'claude-code' && (
                       <h3 className="text-base md:text-lg font-medium text-gray-400 mb-3 md:mb-4">
                         Models
@@ -545,33 +544,35 @@ export default function ReportPage() {
                       </div>
                     ) : (
                       <div className="space-y-2 md:space-y-3">
-                        {/* Language & Stars Row */}
+                        {/* Language & Stars - 2 columns on mobile, vertical on desktop */}
                         {selectedLanguageIndex > 0 &&
                           stats.topModels[selectedLanguageIndex - 1] && (
-                            <div className="grid grid-cols-2 gap-3 md:gap-4">
-                              {/* Top Language */}
-                              <div>
-                                <div className="text-xs md:text-sm text-gray-400">
-                                  Top Language
+                            <>
+                              <div className="grid grid-cols-2 gap-4 md:block md:space-y-3">
+                                {/* Top Language */}
+                                <div>
+                                  <div className="text-xs md:text-sm text-gray-400">
+                                    Top Language
+                                  </div>
+                                  <div className="text-lg md:text-2xl font-normal text-white">
+                                    {
+                                      stats.topModels[selectedLanguageIndex - 1]
+                                        .model
+                                    }
+                                  </div>
                                 </div>
-                                <div className="text-lg md:text-2xl font-normal text-white">
-                                  {
-                                    stats.topModels[selectedLanguageIndex - 1]
-                                      .model
-                                  }
-                                </div>
-                              </div>
 
-                              {/* Total Stars */}
-                              <div>
-                                <div className="text-xs md:text-sm text-gray-400">
-                                  Total Stars
-                                </div>
-                                <div className="text-lg md:text-2xl font-normal text-white">
-                                  {stats.totalStars?.toLocaleString() || 0}
+                                {/* Total Stars */}
+                                <div>
+                                  <div className="text-xs md:text-sm text-gray-400">
+                                    Total Stars
+                                  </div>
+                                  <div className="text-lg md:text-2xl font-normal text-white">
+                                    {stats.totalStars?.toLocaleString() || 0}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                            </>
                           )}
 
                         {/* If no language selected, show stars alone */}
@@ -580,30 +581,30 @@ export default function ReportPage() {
                             <div className="text-xs md:text-sm text-gray-400">
                               Total Stars
                             </div>
-                            <div className="text-lg md:text-xl font-normal text-white">
+                            <div className="text-lg md:text-2xl font-normal text-white">
                               {stats.totalStars?.toLocaleString() || 0}
                             </div>
                           </div>
                         )}
 
-                        {/* Month & Day Row */}
-                        <div className="grid grid-cols-2 gap-3 md:gap-4">
-                          {/* Most Active Month */}
+                        {/* Month & Day - 2 columns on mobile, vertical on desktop */}
+                        <div className="grid grid-cols-2 gap-4 md:block md:space-y-3">
+                          {/* Peak Month */}
                           <div>
                             <div className="text-xs md:text-sm text-gray-400">
-                              Most Active Month
+                              Peak Month
                             </div>
-                            <div className="text-lg md:text-xl font-normal text-white">
+                            <div className="text-lg md:text-2xl font-normal text-white">
                               {stats.mostActiveMonth || 'N/A'}
                             </div>
                           </div>
 
-                          {/* Most Active Day */}
+                          {/* Peak Day */}
                           <div>
                             <div className="text-xs md:text-sm text-gray-400">
-                              Most Active Day
+                              Peak Day
                             </div>
-                            <div className="text-lg md:text-xl font-normal text-white">
+                            <div className="text-lg md:text-2xl font-normal text-white">
                               {stats.mostActiveDay || 'N/A'}
                             </div>
                           </div>
@@ -620,7 +621,7 @@ export default function ReportPage() {
                           ? 'Tokens'
                           : 'Contributions'}
                       </p>
-                      <p className="text-2xl md:text-3xl font-black text-orange-500">
+                      <p className="text-2xl md:text-3xl font-black text-orange-500 whitespace-nowrap">
                         {selectedTool === 'github'
                           ? stats.totalTokens.toLocaleString()
                           : formatNumber(stats.totalTokens)}
@@ -634,7 +635,7 @@ export default function ReportPage() {
                       <p className="text-sm md:text-base text-gray-400 mb-1">
                         Streak
                       </p>
-                      <p className="text-2xl md:text-3xl font-medium text-white">
+                      <p className="text-2xl md:text-3xl font-medium text-white whitespace-nowrap">
                         {stats.longestStreak}
                         <span className="text-lg md:text-xl pl-0.5">🔥</span>
                       </p>
@@ -691,8 +692,8 @@ export default function ReportPage() {
                   </div>
                 </div>
 
-                {/* Footer - URL */}
-                <div className="flex items-center gap-3 text-gray-400 mt-0 md:mt-2">
+                {/* Footer - URL - Horizontal on mobile, vertical on desktop */}
+                <div className="flex md:flex-col items-end md:items-start gap-3 md:gap-2 text-gray-400 mt-0 md:mt-2">
                   <Image
                     src="/logo.png"
                     alt="Year in Code Logo"
