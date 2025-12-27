@@ -358,7 +358,7 @@ export default function UploadPage() {
                             </div>
                           </div>
                           <div className="relative group">
-                            <div className="bg-gray-900 rounded p-1.5 sm:p-2 pr-8 font-mono text-[9px] sm:text-[11px] text-green-400 overflow-x-auto">
+                            <div className="bg-gray-900 rounded p-1.5 sm:p-2 pr-8 font-mono text-[10px] sm:text-xs text-green-400 overflow-x-auto">
                               {windowsShell === 'powershell'
                                 ? `${getCommandPrefix()} daily --since ${year}0101 --until ${year}1231 --json > "$HOME\\Desktop\\my-wrapped-${year}.json"`
                                 : `${getCommandPrefix()} daily --since ${year}0101 --until ${year}1231 --json > "%USERPROFILE%\\Desktop\\my-wrapped-${year}.json"`}
