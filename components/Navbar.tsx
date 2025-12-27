@@ -23,7 +23,7 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Right side - Twitter & GitHub */}
+          {/* Right side - Twitter, GitHub & Product Hunt */}
           <div className="flex items-center gap-3">
             {/* Twitter Card */}
             <a
@@ -68,6 +68,20 @@ export default function Navbar() {
               <span className="text-sm font-medium text-gray-300 group-hover:text-white md:hidden">
                 GitHub
               </span>
+            </a>
+
+            {/* Product Hunt Badge */}
+            <a
+              href="https://www.producthunt.com/products/year-in-code?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-year-in-code"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-all hover:scale-105"
+            >
+              <img
+                alt="Year in Code - Spotify Wrapped for your claude coding year! | Product Hunt"
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1054833&theme=light&t=1766825284609"
+                className="h-11 w-auto"
+              />
             </a>
           </div>
         </div>
