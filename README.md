@@ -1,7 +1,7 @@
 <div align="center">
     <img src="/public/logo.png" alt="Year in Code" width="120" height="120">
     <h1>Year in Code</h1>
-    <p><strong>Transform your Claude Code usage into beautiful year-in-review reports</strong></p>
+    <p><strong>Discover your coding journey — from your very first commit to today</strong></p>
 
 [![GitHub](https://img.shields.io/github/stars/isaadgulzar/year-in-code?style=social)](https://github.com/isaadgulzar/year-in-code)
 [![Website](https://img.shields.io/badge/website-yearincode.xyz-orange)](https://yearincode.xyz)
@@ -15,20 +15,42 @@
 
 ---
 
-> Year-in-review reports for Claude Code users. All processing happens client-side in your browser.
+> Transform your coding activity into beautiful year-in-review reports. Track your GitHub contributions or Claude Code usage — all processed client-side in your browser.
 
 ## ✨ Features
 
-- **📊 Beautiful Visualizations**: Year-long activity heatmaps, top model usage, streak tracking
-- **⚡ Simple & Fast**: Just 2 steps — generate JSON with ccusage, upload, done
+- **🎯 GitHub Wrapped**: Discover how many years you've been coding, from your first commit to now
+- **📊 Beautiful Visualizations**: Year-long activity heatmaps, contribution streaks, top languages
+- **⚡ Simple & Fast**: Just enter your GitHub username or upload Claude Code data
 - **📸 Share Ready**: Download or copy your wrapped summary as a shareable image
-- **🔒 Client-Side Processing**: Your data stays in your browser, nothing uploaded to servers
+- **🔒 100% Private**: All processing happens in your browser, nothing uploaded to servers
 - **💯 Free & Open Source**: No costs, no tracking, no limits
 - **🎨 Responsive Design**: Works beautifully on desktop and mobile
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### Option 1: GitHub Wrapped (Recommended)
+
+The easiest way to get your Year in Code report:
+
+1. 🌐 Visit **[yearincode.xyz](https://yearincode.xyz)**
+2. 📝 Enter your GitHub username
+3. 🎉 Get your wrapped report instantly!
+
+**What you'll discover:**
+
+- **Years in Code**: See which year of coding you're in (calculated from your very first commit!)
+- **Total Contributions**: All your commits, PRs, and issues for the year
+- **Longest Streak**: Your best consecutive contribution days
+- **Top Languages**: Your most-used programming languages
+- **Peak Activity**: Your most productive month and day of the week
+- **Total Stars**: Stars earned across all your repositories
+
+### Option 2: Claude Code Wrapped
+
+For Claude Code users who want to visualize their AI-assisted coding activity:
+
+#### Prerequisites
 
 You need [ccusage](https://github.com/ryoppippi/ccusage) to generate your usage data. No installation needed:
 
@@ -37,7 +59,7 @@ You need [ccusage](https://github.com/ryoppippi/ccusage) to generate your usage 
 npx -y ccusage@latest daily
 ```
 
-### Step 1: Generate Your Data
+#### Step 1: Generate Your Data
 
 Export your Claude Code usage as JSON:
 
@@ -45,8 +67,8 @@ Export your Claude Code usage as JSON:
 # For 2025 data (macOS/Linux)
 npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped-2025.json
 
-# For 2025 data (Windows)
-npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > %USERPROFILE%\Desktop\my-wrapped-2025.json
+# For 2025 data (Windows PowerShell)
+npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > $HOME\Desktop\my-wrapped-2025.json
 
 # For 2024 data
 npx -y ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped-2024.json
@@ -54,13 +76,14 @@ npx -y ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop
 
 > 💡 **Tip**: Always include `@latest` to ensure you're using the newest version of ccusage
 
-### Step 2: Get Your Wrapped Report
+#### Step 2: Get Your Wrapped Report
 
 1. 🌐 Visit **[yearincode.xyz](https://yearincode.xyz)**
-2. 📤 Upload your JSON file (drag & drop supported)
-3. 🎉 View your beautiful wrapped report!
+2. 🔄 Switch to "Claude Code" tab
+3. 📤 Upload your JSON file (drag & drop supported)
+4. 🎉 View your beautiful wrapped report!
 
-### What You'll Get
+**What you'll get:**
 
 - 📊 **Total Tokens**: See your complete token usage for the year
 - 🔥 **Longest Streak**: Your best coding consistency streak
@@ -76,11 +99,12 @@ npx -y ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop
 
 ## Why Year in Code?
 
-Year in Code transforms raw Claude Code usage data into an engaging year-in-review experience:
+Year in Code transforms your coding data into an engaging year-in-review experience:
 
 - 🎁 **Wrapped Experience**: Inspired by Spotify Wrapped and GitHub Wrapped
-- 🔧 **Simple to Use**: No complex setup, just export from ccusage and visualize
-- 🚀 **Built for ccusage**: Designed to work seamlessly with the amazing [ccusage](https://github.com/ryoppippi/ccusage) CLI
+- 🎯 **Unique Insight**: Discover which year of coding you're in — from your very first commit!
+- 🚀 **Multi-Tool Support**: Works with GitHub and Claude Code
+- 🔧 **Simple to Use**: No complex setup, just a username or a file upload
 - 💝 **Open Source**: Free for everyone to use and contribute
 
 ---
@@ -109,34 +133,20 @@ Open [http://localhost:3000](http://localhost:3000) to see the app!
 
 ## How It Works
 
-### For Users:
-
-1. **Generate your data** using the official ccusage CLI:
-
-   ```bash
-   # For 2025 data
-   npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop/my-wrapped.json
-
-   # For 2024 data
-   npx -y ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop/my-wrapped.json
-   ```
-
-2. **Upload to Year in Code**: Visit [yearincode.xyz](https://yearincode.xyz) and upload your JSON file
-
-3. **Get Your Report**: View your beautiful wrapped report with detailed insights and share it!
-
 ### Privacy First 🔒
 
-All data processing happens **100% client-side in your browser**. Your usage data never leaves your computer - we just help you visualize it beautifully!
+- **GitHub Mode**: Fetches public data from GitHub's API using the public [GitHub Contributions API](https://github-contributions-api.jogruber.de/)
+- **Claude Code Mode**: Processes your JSON file **100% client-side in your browser** — your data never leaves your computer!
+
+All processing happens in your browser. We don't store or collect any of your data.
 
 ## Tech Stack
 
 - **Framework**: Next.js 15 (App Router)
 - **Styling**: Tailwind CSS
-- **Auth**: Auth.js (NextAuth v5)
-- **Database**: MongoDB (optional)
 - **Language**: TypeScript
-- **Deployment**: Vercel (recommended)
+- **Deployment**: Vercel
+- **APIs**: GitHub Contributions API (public data only)
 
 ## Development
 
@@ -178,7 +188,18 @@ No environment variables required! The app works completely standalone with no b
 
 ## FAQ & Tips
 
-### How do I get my usage data?
+### How does "Xth Year In Code" work?
+
+When you use GitHub mode, we find your very first commit date across all your public repositories and calculate how many years have passed since then. This gives you a unique perspective on your coding journey!
+
+### Is my data private?
+
+**Yes!**
+
+- **GitHub mode**: Only fetches public contribution data that's already visible on your GitHub profile
+- **Claude Code mode**: Processes files entirely in your browser — nothing is uploaded to our servers
+
+### How do I get my Claude Code usage data?
 
 You need the [ccusage](https://github.com/ryoppippi/ccusage) CLI. No installation required:
 
@@ -194,26 +215,26 @@ npx -y ccusage@latest daily --since 20250101 --until 20251231 --json > ~/Desktop
 
 Currently, each upload processes one year at a time. Multi-year comparison is on the roadmap!
 
-### What data format does it accept?
-
-Year in Code accepts JSON output from `ccusage daily --json`. The app automatically detects the ccusage format and parses it accordingly.
-
-### Can I use this with other AI coding tools?
-
-Currently, Year in Code is optimized for Claude Code data via ccusage. Support for other tools (Cursor, Copilot, etc.) may come in the future!
-
 ### How do I share my wrapped report?
 
-Click the "Download" button to save your summary card as PNG, or use "Copy" to copy it to your clipboard for easy sharing on social media.
+Click the "Download" button to save your summary card as PNG, or use "Copy" to copy it to your clipboard for easy sharing on social media. You can also use "Share on X" for direct Twitter sharing!
+
+### Can I share my GitHub wrapped with a direct link?
+
+Yes! Use this format: `yearincode.xyz/2025/github/your-username`
+
+Example: `yearincode.xyz/2025/github/isaadgulzar`
 
 ## Roadmap
 
+- [x] GitHub integration with "Years in Code" feature
+- [x] Direct link sharing for GitHub wrapped
 - [ ] Support for more ccusage output formats
 - [ ] Multi-year comparison view
-- [ ] More detailed model usage analytics
+- [ ] More detailed analytics (hourly breakdown, commit patterns)
 - [ ] Custom color themes
 - [ ] PDF export option
-- [ ] Social media optimization (OG images)
+- [ ] More AI coding tools (Cursor, Copilot)
 
 ## Contributing
 
@@ -234,9 +255,12 @@ MIT License - see [LICENSE](LICENSE) file for details
 This project wouldn't exist without:
 
 - 🎵 **Spotify Wrapped & GitHub Wrapped**: Inspiration for the wrapped experience
-- 🔧 **[ccusage](https://github.com/ryoppippi/ccusage)** by [@ryoppippi](https://github.com/ryoppippi): The amazing CLI that powers our data generation
+- 🌐 **[GitHub Contributions API](https://github-contributions-api.jogruber.de/)**: Powers our GitHub integration
+- 🔧 **[ccusage](https://github.com/ryoppippi/ccusage)** by [@ryoppippi](https://github.com/ryoppippi): The amazing CLI that powers Claude Code data generation
 - 💜 **Claude Code Community**: For making AI-assisted coding amazing
-- 🙏 **Open Source**: Built on the shoulders of giants (Next.js, Tailwind, Chart.js)
+- 🙏 **Open Source**: Built on the shoulders of giants (Next.js, Tailwind, html-to-image)
+
+Special thanks to **[@winXzorin](https://github.com/winXzorin)** (Eren) for requesting the GitHub wrapped feature!
 
 ## Support & Community
 
@@ -248,16 +272,16 @@ This project wouldn't exist without:
 ## Related Projects
 
 - 📊 [ccusage](https://github.com/ryoppippi/ccusage) - The official Claude Code usage analyzer CLI
+- 🌐 [GitHub Contributions API](https://github-contributions-api.jogruber.de/) - Public GitHub contribution data
 - 🌐 [yearincode.xyz](https://yearincode.xyz) - Live demo and usage
-- 📚 [ccusage documentation](https://ccusage.com/) - Full ccusage docs
 
 ---
 
 <div align="center">
-    <p><strong>Built with ❤️ for the Claude Code community</strong></p>
+    <p><strong>Built with ❤️ for developers worldwide</strong></p>
     <p>
         <a href="https://github.com/isaadgulzar/year-in-code">GitHub</a> •
         <a href="https://yearincode.xyz">Website</a> •
-        <a href="https://github.com/ryoppippi/ccusage">ccusage CLI</a>
+        <a href="https://x.com/isaadgulzar">Twitter</a>
     </p>
 </div>
