@@ -42,27 +42,33 @@ export async function fetchGitHubUserStats(
 
     // Process contributions
     if (data.contributions) {
-      data.contributions.forEach((contribution: any) => {
-        const contributionDate = new Date(contribution.date)
-        const contributionYear = contributionDate.getFullYear()
+      data.contributions.forEach(
+        (contribution: {
+          date: string
+          count: number
+          level?: 0 | 1 | 2 | 3 | 4
+        }) => {
+          const contributionDate = new Date(contribution.date)
+          const contributionYear = contributionDate.getFullYear()
 
-        // Add to all contributions for first commit calculation
-        allContributionDays.push({
-          date: contribution.date,
-          count: contribution.count,
-          level: contribution.level || 0,
-        })
-
-        // Filter for specific year for stats display
-        if (contributionYear === year) {
-          yearContributionDays.push({
+          // Add to all contributions for first commit calculation
+          allContributionDays.push({
             date: contribution.date,
             count: contribution.count,
-            level: contribution.level || 0,
+            level: (contribution.level ?? 0) as 0 | 1 | 2 | 3 | 4,
           })
-          totalContributions += contribution.count
+
+          // Filter for specific year for stats display
+          if (contributionYear === year) {
+            yearContributionDays.push({
+              date: contribution.date,
+              count: contribution.count,
+              level: (contribution.level ?? 0) as 0 | 1 | 2 | 3 | 4,
+            })
+            totalContributions += contribution.count
+          }
         }
-      })
+      )
     }
 
     // Calculate streaks for the specific year
@@ -80,16 +86,17 @@ export async function fetchGitHubUserStats(
 
     const firstCommitDate = firstCommitDay?.date
 
-    // Calculate years of coding from first commit to now
+    // Calculate years of coding from first commit to the end of the specified year
     // This shows "Xth Year In Code" on the report
     // Count actual full years that have passed
     let yearsOfCoding = 0
     if (firstCommitDate) {
       const firstDate = new Date(firstCommitDate)
-      const now = new Date()
+      // Use the last day of the specified year instead of current date
+      const endOfYear = new Date(year, 11, 31) // December 31st of the specified year
 
       // Calculate the difference in milliseconds
-      const diffMs = now.getTime() - firstDate.getTime()
+      const diffMs = endOfYear.getTime() - firstDate.getTime()
       // Convert to years (accounting for leap years approximately)
       const years = diffMs / (1000 * 60 * 60 * 24 * 365.25)
 
@@ -306,7 +313,8 @@ async function fetchTotalStars(username: string): Promise<number> {
     const repos = await response.json()
 
     return repos.reduce(
-      (total: number, repo: any) => total + (repo.stargazers_count || 0),
+      (total: number, repo: { stargazers_count?: number }) =>
+        total + (repo.stargazers_count || 0),
       0
     )
   } catch (error) {
