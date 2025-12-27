@@ -18,7 +18,6 @@ export default function ReportPage() {
   const [isCopying, setIsCopying] = useState(false)
   const [isSharing, setIsSharing] = useState(false)
   const [currentDomain, setCurrentDomain] = useState('')
-  const [showTooltip, setShowTooltip] = useState(false)
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState<number>(1) // 0 = None, 1 = 1st, 2 = 2nd, etc.
   const cardRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
@@ -36,33 +35,56 @@ export default function ReportPage() {
       const statsData = sessionStorage.getItem('wrappedStats')
       const tool = sessionStorage.getItem('selectedTool') || 'claude-code'
       const username = sessionStorage.getItem('githubUsername') || ''
+      const cachedYear = sessionStorage.getItem('wrappedYear') || ''
 
-      // If URL has GitHub params but no sessionStorage, fetch the data
-      if (urlTab === 'github' && urlUsername && !statsData) {
-        try {
-          const githubStats = await fetchGitHubUserStats(
-            urlUsername,
-            parseInt(year)
-          )
-          const stats = parseGitHubStats(githubStats)
+      // If URL has GitHub params, check if we need to fetch new data
+      if (urlTab === 'github' && urlUsername) {
+        // Fetch data if:
+        // 1. No cached data exists, OR
+        // 2. The username in URL is different from cached username, OR
+        // 3. The year in URL is different from cached year
+        const shouldFetch =
+          !statsData || username !== urlUsername || cachedYear !== year
 
-          // Store in sessionStorage
-          sessionStorage.setItem('wrappedStats', JSON.stringify(stats))
-          sessionStorage.setItem('selectedTool', 'github')
-          sessionStorage.setItem('githubUsername', urlUsername)
+        if (shouldFetch) {
+          try {
+            const githubStats = await fetchGitHubUserStats(
+              urlUsername,
+              parseInt(year)
+            )
+            const stats = parseGitHubStats(githubStats)
 
-          setStats(stats)
-          setSelectedTool('github')
-          setGithubUsername(urlUsername)
-        } catch (error) {
-          toast.error('Failed to fetch GitHub data', {
-            style: {
-              fontSize: '14px',
-            },
-          })
-          console.error('Error fetching GitHub data:', error)
-          router.push(`/${year}/upload`)
-          return
+            // Store in sessionStorage
+            sessionStorage.setItem('wrappedStats', JSON.stringify(stats))
+            sessionStorage.setItem('selectedTool', 'github')
+            sessionStorage.setItem('githubUsername', urlUsername)
+            sessionStorage.setItem('wrappedYear', year)
+
+            setStats(stats)
+            setSelectedTool('github')
+            setGithubUsername(urlUsername)
+          } catch (error) {
+            toast.error('Failed to fetch GitHub data', {
+              style: {
+                fontSize: '14px',
+              },
+            })
+            console.error('Error fetching GitHub data:', error)
+            router.push(`/${year}/upload`)
+            return
+          }
+        } else {
+          // Use cached data for the same username
+          try {
+            const wrappedStats = JSON.parse(statsData)
+            setStats(wrappedStats)
+            setSelectedTool(tool)
+            setGithubUsername(username)
+          } catch (error) {
+            console.error('Error parsing stats:', error)
+            router.push(`/${year}/upload`)
+            return
+          }
         }
       }
       // Otherwise use sessionStorage data
@@ -106,17 +128,6 @@ export default function ReportPage() {
       })
       .join(' ')
       .replace(/(\d+)\s+(\d+)/g, '$1.$2') // Convert "4 5" to "4.5"
-  }
-
-  const calculateUniversalRank = (contributions: number) => {
-    // Based on GitHub contribution percentiles
-    if (contributions >= 5000) return 'Top 0.5%'
-    if (contributions >= 2000) return 'Top 1%'
-    if (contributions >= 1000) return 'Top 2%'
-    if (contributions >= 500) return 'Top 5%'
-    if (contributions >= 200) return 'Top 20%'
-    if (contributions >= 50) return 'Top 50%'
-    return 'Top 80%'
   }
 
   const getOrdinalSuffix = (num: number) => {
@@ -369,8 +380,20 @@ export default function ReportPage() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-orange-500 mx-auto mb-4"></div>
-          <p className="text-xl text-white">Loading your report...</p>
+          <Image
+            src="/loader.gif"
+            alt="Loading..."
+            width={128}
+            height={128}
+            className="w-32 h-32 mx-auto"
+            unoptimized
+          />
+          <p className="text-xl text-white font-semibold mb-2 -mt-8">
+            Crunching your code history...
+          </p>
+          <p className="text-sm text-gray-400">
+            Counting commits, calculating streaks, and crafting your story ✨
+          </p>
         </div>
       </div>
     )
@@ -384,7 +407,7 @@ export default function ReportPage() {
       <Toaster
         position="top-center"
         containerStyle={{
-          top: '5.25rem',
+          top: '4.25rem',
         }}
         toastOptions={{
           style: {
@@ -392,7 +415,7 @@ export default function ReportPage() {
           },
         }}
       />
-      <div className="min-h-[calc(100vh-5rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-8 overflow-auto">
+      <div className="min-h-[calc(100vh-4rem)] md:min-h-[calc(100vh-5rem)] bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4 sm:p-8 overflow-auto">
         <div className="w-full" style={{ maxWidth: '540px' }}>
           {/* Language Selector (GitHub only) */}
           {selectedTool === 'github' && stats && stats.topModels.length > 0 && (
