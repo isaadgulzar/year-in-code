@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
+
 interface GitHubFormProps {
   githubUsername: string
   setGithubUsername: (username: string) => void
@@ -11,6 +13,13 @@ export default function GitHubForm({
   setGithubUsername,
   onSubmit,
 }: GitHubFormProps) {
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    // Focus input after mount to avoid hydration mismatch
+    inputRef.current?.focus()
+  }, [])
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && githubUsername.trim() !== '' && onSubmit) {
       onSubmit()
@@ -34,13 +43,13 @@ export default function GitHubForm({
                 Enter your GitHub username:
               </p>
               <input
+                ref={inputRef}
                 type="text"
                 value={githubUsername}
                 onChange={e => setGithubUsername(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="e.g., isaadgulzar"
                 className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors text-sm"
-                autoFocus
               />
               <p className="text-gray-400 text-xs mt-2">
                 💡 Make sure your GitHub profile is public to generate your
