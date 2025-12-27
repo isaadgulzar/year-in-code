@@ -135,19 +135,18 @@ export default function ReportPage() {
 
     setIsCopying(true)
     try {
-      const blob = await toPng(cardRef.current, {
-        quality: 1,
-        pixelRatio: 2,
-        backgroundColor: '#1f2937',
-      }).then(dataUrl => {
-        return fetch(dataUrl).then(res => res.blob())
+      // Safari requires ClipboardItem to be created synchronously with a Promise
+      const clipboardItem = new ClipboardItem({
+        'image/png': toPng(cardRef.current, {
+          quality: 1,
+          pixelRatio: 2,
+          backgroundColor: '#1f2937',
+        }).then(dataUrl => {
+          return fetch(dataUrl).then(res => res.blob())
+        }),
       })
 
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'image/png': blob,
-        }),
-      ])
+      await navigator.clipboard.write([clipboardItem])
 
       toast.success('Image copied to clipboard!', {
         style: {
@@ -180,19 +179,18 @@ export default function ReportPage() {
     setIsSharing(true)
     try {
       // Step 1: Copy the image to clipboard
-      const blob = await toPng(cardRef.current, {
-        quality: 1,
-        pixelRatio: 2,
-        backgroundColor: '#1f2937',
-      }).then(dataUrl => {
-        return fetch(dataUrl).then(res => res.blob())
+      // Safari requires ClipboardItem to be created synchronously with a Promise
+      const clipboardItem = new ClipboardItem({
+        'image/png': toPng(cardRef.current, {
+          quality: 1,
+          pixelRatio: 2,
+          backgroundColor: '#1f2937',
+        }).then(dataUrl => {
+          return fetch(dataUrl).then(res => res.blob())
+        }),
       })
 
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'image/png': blob,
-        }),
-      ])
+      await navigator.clipboard.write([clipboardItem])
 
       // Step 2: Show toast with countdown
       let countdown = 2
