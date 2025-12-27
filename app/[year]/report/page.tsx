@@ -220,7 +220,7 @@ export default function ReportPage() {
             stats?.topModels[0]?.model || 'N/A'
           )}\n\nGet your Claude Code wrapped at yearincode.xyz/${
             stats?.year
-          }\n\n#YearInCode #ClaudeCode #AIcoding #DevTools #BuildInPublic`
+          }\n\n#YearInCode #ClaudeCode #CCUsage #DevTools #BuildInPublic #Wrapped2025`
         )
 
         const twitterUrl = `https://twitter.com/intent/tweet?text=${text}`
