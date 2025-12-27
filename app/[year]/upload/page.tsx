@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback } from 'react'
 import { useRouter, useParams, useSearchParams } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import { parseCcusageJson } from '@/lib/ccusage-parser'
 import { parseCcusageDailyJson } from '@/lib/ccusage-daily-parser'
 import { fetchGitHubUserStats } from '@/lib/github-service'
 import { parseGitHubStats } from '@/lib/github-parser'
+import GitHubForm from '@/components/GitHubForm'
 
 export default function UploadPage() {
   const searchParams = useSearchParams()
@@ -222,7 +223,7 @@ export default function UploadPage() {
       <Toaster
         position="top-center"
         containerStyle={{
-          top: '5.8rem',
+          top: '4.8rem',
         }}
         toastOptions={{
           style: {
@@ -237,14 +238,14 @@ export default function UploadPage() {
           },
         }}
       />
-      <div className="min-h-[calc(100vh-5rem)] bg-linear-to-br from-gray-900 via-gray-800 to-black text-white flex items-start justify-center overflow-y-auto">
-        <main className="flex-1 flex items-start justify-center px-4 sm:px-6 py-8">
+      <div className="min-h-[calc(100vh-4rem)] md:min-h-[calc(100vh-5rem)] bg-linear-to-br from-gray-900 via-gray-800 to-black text-white flex items-start justify-center">
+        <main className="flex-1 flex items-start justify-center px-2 sm:px-6 py-4">
           <div className="w-full max-w-4xl">
             <div className="text-center mb-4 sm:mb-6">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2">
                 Your wrapped report is{' '}
-                <span className="bg-linear-to-br from-orange-400 to-pink-600 text-transparent bg-clip-text">
-                  one upload
+                <span className="bg-linear-to-br from-orange-400 to-pink-600 text-transparent bg-clip-text transition-all duration-300">
+                  {activeTab === 'github' ? 'one click' : 'one upload'}
                 </span>{' '}
                 away
               </h1>
@@ -584,37 +585,11 @@ export default function UploadPage() {
               )}
 
               {activeTab === 'github' && (
-                <div className="mt-2 sm:mt-4 p-3 sm:p-4 rounded-lg bg-gray-800/50 border border-gray-700">
-                  <h3 className="font-semibold mb-4 text-orange-400 text-sm sm:text-base">
-                    🐙 GitHub Wrapped:
-                  </h3>
-
-                  <div className="space-y-3">
-                    <div className="bg-gradient-to-r from-orange-500/10 to-pink-600/10 border border-orange-500/30 rounded-lg p-4">
-                      <div className="flex items-start gap-2">
-                        <div className="flex-shrink-0 w-6 h-6 rounded-full bg-orange-500 flex items-center justify-center font-bold text-white text-xs">
-                          1
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-semibold text-white mb-3 text-sm">
-                            Enter your GitHub username:
-                          </p>
-                          <input
-                            type="text"
-                            value={githubUsername}
-                            onChange={e => setGithubUsername(e.target.value)}
-                            placeholder="e.g., isaadgulzar"
-                            className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors text-sm"
-                          />
-                          <p className="text-gray-400 text-xs mt-2">
-                            💡 Make sure your GitHub profile is public to
-                            generate your wrapped
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <GitHubForm
+                  githubUsername={githubUsername}
+                  setGithubUsername={setGithubUsername}
+                  onSubmit={handleProcess}
+                />
               )}
             </div>
 
