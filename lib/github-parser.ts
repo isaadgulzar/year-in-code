@@ -1,5 +1,5 @@
 import { YearStats, DailyStats } from './parser'
-import { GitHubUserStats, GitHubContributionDay } from './github-service'
+import { GitHubUserStats } from './github-service'
 
 /**
  * Converts GitHub user stats to YearStats format for consistent display
