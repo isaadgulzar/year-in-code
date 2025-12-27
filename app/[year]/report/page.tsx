@@ -194,22 +194,53 @@ export default function ReportPage() {
         }),
       ])
 
-      // Step 2: Show toast with instructions
-      toast.success('Image copied! Paste it in your tweet (Ctrl/Cmd+V)', {
-        duration: 5000,
-        style: {
-          background: '#374151',
-          color: '#fff',
-          fontFamily: 'var(--font-jetbrains-mono)',
-          minWidth: '550px',
-        },
-        iconTheme: {
-          primary: '#f97316',
-          secondary: '#fff',
-        },
-      })
+      // Step 2: Show toast with countdown
+      let countdown = 2
+      const toastId = toast.success(
+        `Image copied! Paste it in your tweet in ${countdown}s`,
+        {
+          duration: 5000,
+          style: {
+            background: '#374151',
+            color: '#fff',
+            fontFamily: 'var(--font-jetbrains-mono)',
+            minWidth: '550px',
+          },
+          iconTheme: {
+            primary: '#f97316',
+            secondary: '#fff',
+          },
+        }
+      )
 
-      // Step 3: Open Twitter in new tab after 2.5s delay (gives user time to read toast)
+      // Update countdown every second
+      const countdownInterval = setInterval(() => {
+        countdown--
+        if (countdown > 0) {
+          toast.success(
+            `Image copied! Paste it in your tweet in ${countdown}s`,
+            {
+              id: toastId,
+              duration: 5000,
+              style: {
+                background: '#374151',
+                color: '#fff',
+                fontFamily: 'var(--font-jetbrains-mono)',
+                minWidth: '550px',
+              },
+              iconTheme: {
+                primary: '#f97316',
+                secondary: '#fff',
+              },
+            }
+          )
+        } else {
+          clearInterval(countdownInterval)
+          toast.dismiss(toastId)
+        }
+      }, 1000)
+
+      // Step 3: Open Twitter in new tab after 2s delay
       setTimeout(() => {
         const text = encodeURIComponent(
           `Wrapped my ${stats?.year} with Claude Code 🚀\n\n💪 Crushed ${formatNumber(
@@ -220,7 +251,7 @@ export default function ReportPage() {
             stats?.topModels[0]?.model || 'N/A'
           )}\n\nGet your Claude Code wrapped at yearincode.xyz/${
             stats?.year
-          }\n\n#YearInCode #ClaudeCode #AIcoding #DevTools #BuildInPublic`
+          }\n\n#YearInCode #ClaudeCode #CCUsage #DevTools #BuildInPublic #Wrapped2025`
         )
 
         const twitterUrl = `https://twitter.com/intent/tweet?text=${text}`
