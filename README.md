@@ -10,6 +10,10 @@
 </div>
 
 <div align="center">
+    <img src="/public/year-in-code-og-image-git.png" alt="Year in Code Screenshot" width="600">
+</div>
+
+<div align="center">
     <img src="/public/year-in-code-og-image.png" alt="Year in Code Screenshot" width="600">
 </div>
 
@@ -90,6 +94,10 @@ npx -y ccusage@latest daily --since 20240101 --until 20241231 --json > ~/Desktop
 - 🤖 **Top 3 Models**: Most-used Claude models (Sonnet, Opus, Haiku)
 - 📅 **Activity Heatmap**: 365-day visualization of your coding activity
 - 📸 **Shareable Card**: Beautiful summary card to download or share
+
+<div align="center">
+    <img src="/public/2025-cc-wrapped-preview-image-github.png" alt="Year in Code Screenshot" width="600">
+</div>
 
 <div align="center">
     <img src="/public/2025-cc-wrapped-preview-image.png" alt="Year in Code Screenshot" width="600">
