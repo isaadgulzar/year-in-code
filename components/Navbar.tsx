@@ -5,9 +5,9 @@ import Image from 'next/image'
 
 export default function Navbar() {
   return (
-    <nav className="w-full border-b border-gray-800 bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+    <nav className="w-full bg-gray-900 h-16 md:h-20 flex items-center border-b border-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="flex justify-between items-center">
           {/* Logo */}
           <Link
             href="/"
@@ -18,7 +18,7 @@ export default function Navbar() {
               alt="Year in Code Logo"
               width={96}
               height={48}
-              className="h-12 w-auto"
+              className="h-8 sm:h-12 w-auto"
               priority
             />
           </Link>
@@ -63,7 +63,7 @@ export default function Navbar() {
                 />
               </svg>
               <span className="text-sm font-medium text-gray-300 group-hover:text-white hidden md:inline">
-                View on GitHub
+                Star on GitHub
               </span>
             </a>
 
@@ -74,10 +74,13 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="transition-all hover:scale-105"
             >
-              <img
+              <Image
                 alt="Year in Code - Spotify Wrapped for your claude coding year! | Product Hunt"
                 src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1054833&theme=light&t=1766825284609"
+                width={250}
+                height={54}
                 className="h-8 md:h-11 w-auto"
+                unoptimized
               />
             </a>
           </div>
