@@ -36,6 +36,10 @@ export interface YearStats {
   dailyData: DailyStats[]
   peakDay: string
   peakHour?: number
+  mostActiveMonth?: string
+  mostActiveDay?: string
+  totalStars?: number
+  yearsOfCoding?: number
 }
 
 export function parseClaudeCodeData(entries: UsageEntry[]): YearStats {
