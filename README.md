@@ -260,7 +260,7 @@ This project wouldn't exist without:
 - 💜 **Claude Code Community**: For making AI-assisted coding amazing
 - 🙏 **Open Source**: Built on the shoulders of giants (Next.js, Tailwind, html-to-image)
 
-Special thanks to **[@winXzorin](https://github.com/winXzorin)** (Eren) for requesting the GitHub wrapped feature!
+Special thanks to **[@winXzorin](https://x.com/winXzorin)** (Eren) for requesting the GitHub wrapped feature!
 
 ## Support & Community
 
