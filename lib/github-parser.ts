@@ -4,7 +4,10 @@ import { GitHubUserStats } from './github-service'
 /**
  * Converts GitHub user stats to YearStats format for consistent display
  */
-export function parseGitHubStats(githubStats: GitHubUserStats): YearStats {
+export function parseGitHubStats(
+  githubStats: GitHubUserStats,
+  requestedYear?: number
+): YearStats {
   // Convert contribution days to daily stats
   const dailyData: DailyStats[] = githubStats.contributionDays.map(day => ({
     date: day.date,
@@ -16,10 +19,12 @@ export function parseGitHubStats(githubStats: GitHubUserStats): YearStats {
   // Sort by date
   dailyData.sort((a, b) => a.date.localeCompare(b.date))
 
-  // Get the year from the first contribution
-  const year = dailyData[0]?.date
-    ? new Date(dailyData[0].date).getFullYear()
-    : new Date().getFullYear()
+  // Use the requested year if provided, otherwise get from data
+  const year =
+    requestedYear ||
+    (dailyData[0]?.date
+      ? new Date(dailyData[0].date).getFullYear()
+      : new Date().getFullYear())
 
   // Convert top languages to top models format
   const topModels = githubStats.topLanguages.map(lang => ({
