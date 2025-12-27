@@ -23,21 +23,21 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Right side - Twitter & GitHub */}
-          <div className="flex items-center gap-3">
+          {/* Right side - Twitter, GitHub & Product Hunt */}
+          <div className="flex items-center gap-2 md:gap-3">
             {/* Twitter Card */}
             <a
               href="https://x.com/isaadgulzar"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 transition-all hover:scale-105"
+              className="flex items-center gap-2 px-2 py-1.5 md:px-4 md:py-2.5 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 transition-all hover:scale-105"
             >
               <Image
                 src="/avatar.jpg"
                 alt="Saad Gulzar"
                 width={20}
                 height={20}
-                className="w-6 h-6 rounded-full border-[1.5] border-[#34d399]"
+                className="w-5 h-5 md:w-6 md:h-6 rounded-full border-[1.5] border-[#34d399]"
               />
               <span className="text-sm font-medium text-gray-300 hover:text-white hidden sm:inline">
                 Built by @isaadgulzar
@@ -49,10 +49,10 @@ export default function Navbar() {
               href="https://github.com/isaadgulzar/year-in-code"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 transition-all hover:scale-105 group"
+              className="flex items-center gap-2 px-2 py-1.5 md:px-4 md:py-2.5 rounded-xl bg-gray-800/60 hover:bg-gray-800 border border-gray-700/50 transition-all hover:scale-105 group"
             >
               <svg
-                className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors"
+                className="w-4 h-4 md:w-5 md:h-5 text-gray-400 group-hover:text-white transition-colors"
                 fill="currentColor"
                 viewBox="0 0 24 24"
               >
@@ -65,9 +65,20 @@ export default function Navbar() {
               <span className="text-sm font-medium text-gray-300 group-hover:text-white hidden md:inline">
                 View on GitHub
               </span>
-              <span className="text-sm font-medium text-gray-300 group-hover:text-white md:hidden">
-                GitHub
-              </span>
+            </a>
+
+            {/* Product Hunt Badge */}
+            <a
+              href="https://www.producthunt.com/products/year-in-code?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-year-in-code"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-all hover:scale-105"
+            >
+              <img
+                alt="Year in Code - Spotify Wrapped for your claude coding year! | Product Hunt"
+                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1054833&theme=light&t=1766825284609"
+                className="h-8 md:h-11 w-auto"
+              />
             </a>
           </div>
         </div>
