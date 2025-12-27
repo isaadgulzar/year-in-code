@@ -92,16 +92,23 @@ export async function fetchGitHubUserStats(
     let yearsOfCoding = 0
     if (firstCommitDate) {
       const firstDate = new Date(firstCommitDate)
-      // Use the last day of the specified year instead of current date
-      const endOfYear = new Date(year, 11, 31) // December 31st of the specified year
+      const firstYear = firstDate.getFullYear()
 
-      // Calculate the difference in milliseconds
-      const diffMs = endOfYear.getTime() - firstDate.getTime()
-      // Convert to years (accounting for leap years approximately)
-      const years = diffMs / (1000 * 60 * 60 * 24 * 365.25)
+      // If the requested year is before the first commit year, set to 0
+      if (year < firstYear) {
+        yearsOfCoding = 0
+      } else {
+        // Use the last day of the specified year instead of current date
+        const endOfYear = new Date(year, 11, 31) // December 31st of the specified year
 
-      // Round up to get "Xth year" (someone in their 5th year has completed 4+ years)
-      yearsOfCoding = Math.ceil(years)
+        // Calculate the difference in milliseconds
+        const diffMs = endOfYear.getTime() - firstDate.getTime()
+        // Convert to years (accounting for leap years approximately)
+        const years = diffMs / (1000 * 60 * 60 * 24 * 365.25)
+
+        // Round up to get "Xth year" (someone in their 5th year has completed 4+ years)
+        yearsOfCoding = Math.ceil(years)
+      }
     }
 
     // For now, we'll fetch languages separately if needed
