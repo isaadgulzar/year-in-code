@@ -63,7 +63,7 @@ export default function Navbar() {
                 />
               </svg>
               <span className="text-sm font-medium text-gray-300 group-hover:text-white hidden md:inline">
-                View on GitHub
+                Star on GitHub
               </span>
             </a>
 
