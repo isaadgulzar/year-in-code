@@ -46,9 +46,9 @@ export const metadata: Metadata = {
     siteName: 'Year in Code',
     images: [
       {
-        url: '/year-in-code-og-image-git.png',
-        width: 1200,
-        height: 630,
+        url: 'https://yearincode.xyz/year-in-code-og-image-git.png',
+        width: 2400,
+        height: 1260,
         alt: 'Year in Code - AI Coding Year Wrapped',
       },
     ],
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     title: 'Year in Code - Your AI Coding Year Wrapped',
     description:
       'Generate beautiful Spotify Wrapped-style reports for your Claude Code usage. 100% privacy-first.',
-    images: ['/year-in-code-og-image-git.png'],
+    images: ['https://yearincode.xyz/year-in-code-og-image-git.png'],
     // Add your Twitter handle here when you have one
     // creator: "@yourtwitterhandle",
   },

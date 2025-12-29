@@ -19,6 +19,8 @@ export default function ReportPage() {
   const [isSharing, setIsSharing] = useState(false)
   const [currentDomain, setCurrentDomain] = useState('')
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState<number>(1) // 0 = None, 1 = 1st, 2 = 2nd, etc.
+  const [submitToLeaderboard, setSubmitToLeaderboard] = useState(false)
+  const [submittedToLeaderboard, setSubmittedToLeaderboard] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const params = useParams()
@@ -256,6 +258,63 @@ export default function ReportPage() {
       })
     } finally {
       setIsCopying(false)
+    }
+  }
+
+  const handleLeaderboardSubmit = async () => {
+    if (!stats || !githubUsername || submittedToLeaderboard) return
+
+    try {
+      const response = await fetch('/api/leaderboard/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: githubUsername,
+          avatarUrl: `https://github.com/${githubUsername}.png`,
+          year: stats.year,
+          yearsInCode: stats.yearsOfCoding || 0,
+          totalContributions: stats.totalTokens,
+          longestStreak: stats.longestStreak,
+          totalStars: stats.totalStars || 0,
+          topLanguages: stats.topModels.slice(0, 5).map(m => m.model),
+          firstCommitDate:
+            stats.dailyData && stats.dailyData.length > 0
+              ? stats.dailyData[0].date
+              : undefined,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setSubmittedToLeaderboard(true)
+        toast.success('Added to leaderboard! 🎉', {
+          style: {
+            background: '#374151',
+            color: '#fff',
+            fontFamily: 'var(--font-jetbrains-mono)',
+            fontSize: '14px',
+          },
+          iconTheme: {
+            primary: '#10b981',
+            secondary: '#fff',
+          },
+        })
+      } else {
+        throw new Error(data.error || 'Failed to submit')
+      }
+    } catch (error) {
+      console.error('Error submitting to leaderboard:', error)
+      toast.error('Failed to submit to leaderboard', {
+        style: {
+          background: '#374151',
+          color: '#fff',
+          fontFamily: 'var(--font-jetbrains-mono)',
+          fontSize: '14px',
+        },
+      })
     }
   }
 
@@ -875,6 +934,84 @@ export default function ReportPage() {
               <span className="text-base">←</span>
               Go back
             </Link>
+          </div>
+
+          {/* Leaderboard Opt-in (GitHub only) */}
+          {selectedTool === 'github' && githubUsername && (
+            <div className="mt-6 w-full px-8 sm:px-0">
+              <div className="bg-gray-800/60 rounded-xl p-4 sm:p-6 border border-gray-700/50">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="leaderboard-optin"
+                    checked={submitToLeaderboard}
+                    onChange={e => {
+                      setSubmitToLeaderboard(e.target.checked)
+                      if (e.target.checked) {
+                        handleLeaderboardSubmit()
+                      }
+                    }}
+                    disabled={submittedToLeaderboard}
+                    className="mt-1 w-4 h-4 rounded border-gray-600 text-orange-500 focus:ring-orange-500 focus:ring-offset-gray-800"
+                  />
+                  <div className="flex-1">
+                    <label
+                      htmlFor="leaderboard-optin"
+                      className="text-sm sm:text-base font-medium text-white cursor-pointer"
+                    >
+                      {submittedToLeaderboard ? (
+                        <span className="flex items-center gap-2">
+                          ✓ Added to Public Leaderboard
+                          <Link
+                            href={`/leaderboard/${year}`}
+                            className="text-orange-500 hover:text-orange-400 underline"
+                          >
+                            View Leaderboard →
+                          </Link>
+                        </span>
+                      ) : (
+                        'Add to Public Leaderboard'
+                      )}
+                    </label>
+                    <p className="text-xs sm:text-sm text-gray-400 mt-1">
+                      Share your stats publicly and compete with other
+                      developers
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Verified Badge CTA */}
+          <div className="mt-6 w-full px-8 sm:px-0">
+            <div className="bg-gradient-to-r from-purple-900/40 to-blue-900/40 rounded-xl p-6 border border-purple-500/30">
+              <div className="text-center">
+                <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
+                  Want a Verified Badge?
+                </h3>
+                <p className="text-sm sm:text-base text-gray-300 mb-4">
+                  Get a permanent verified badge for your portfolio or GitHub
+                  README
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 items-center justify-center">
+                  <a
+                    href="https://app.yearincode.xyz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-6 py-3 rounded-xl text-base font-semibold bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 shadow-lg hover:scale-105 transform transition-all"
+                  >
+                    Get Verified Badge - $4.99
+                  </a>
+                  <Link
+                    href={`/leaderboard/${year}`}
+                    className="px-6 py-3 rounded-xl text-base font-medium bg-gray-800/60 text-white hover:bg-gray-800 border border-gray-700/50 hover:scale-105 transform transition-all"
+                  >
+                    View Leaderboard
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="hidden">
